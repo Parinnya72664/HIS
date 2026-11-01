@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ระบบผู้ป่วย | โรงพยาบาลมหาราชนครราชสีมา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#edf4fb;--panel:#fff;--ink:#12263a;--mute:#587089;--line:#d6e3f1;--brand:#1769c9;--brand-ink:#fff;--tint:#ddebfa;--side:#0f4c9e;--side2:#1a7bc4;--side-ink:#dcebff;--warn:#b3392f;--warn-tint:#fbe9e7;--tag:#fff4cf;--tag-line:#e4c85a;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1824;--panel:#132436;--ink:#e6f1ff;--mute:#8fa9c4;--line:#22405e;--brand:#5aa9ff;--brand-ink:#06182c;--tint:#173654;--side:#0a2a52;--side2:#0c3a63;--side-ink:#a9c8ea;--warn:#ff8f84;--warn-tint:#3a1f1d;--tag:#3b3517;--tag-line:#8d7a25;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1824;--panel:#132436;--ink:#e6f1ff;--mute:#8fa9c4;--line:#22405e;--brand:#5aa9ff;--brand-ink:#06182c;--tint:#173654;--side:#0a2a52;--side2:#0c3a63;--side-ink:#a9c8ea;--warn:#ff8f84;--warn-tint:#3a1f1d;--tag:#3b3517;--tag-line:#8d7a25;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.6 "IBM Plex Sans Thai","Noto Sans Thai",Tahoma,sans-serif}
+.app{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+aside{background:linear-gradient(180deg,var(--side),var(--side2));color:var(--side-ink);padding:22px 14px;position:sticky;top:0;height:100vh}
+.logo{display:flex;gap:10px;align-items:center;padding:0 8px 22px;color:#fff;font-weight:600;line-height:1.25}
+.logo i{width:36px;height:36px;border-radius:9px;background:#fff;display:grid;place-items:center;flex:none}
+.logo i:after{content:"";width:16px;height:16px;background:linear-gradient(var(--brand),var(--brand)) center/100% 5px no-repeat,linear-gradient(var(--brand),var(--brand)) center/5px 100% no-repeat}
+.logo small{display:block;font-weight:400;color:var(--side-ink);font-size:12px}
+nav button{all:unset;box-sizing:border-box;display:flex;width:100%;gap:10px;align-items:center;padding:10px 12px;border-radius:8px;cursor:pointer;color:var(--side-ink)}
+nav button:hover{background:rgba(255,255,255,.07)}
+nav button[aria-current=page]{background:rgba(255,255,255,.14);color:#fff;font-weight:600}
+nav button:focus-visible,.btn:focus-visible,input:focus-visible,textarea:focus-visible,.tabs button:focus-visible{outline:3px solid var(--brand);outline-offset:2px}
+nav .sub{padding:14px 12px 4px;font-size:12px;color:#a9cdf2}
+nav button[disabled]{opacity:.5;cursor:default}
+main{padding:24px 28px 40px;max-width:1180px;width:100%}
+header.top{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;margin-bottom:18px}
+h1{margin:0;font-size:24px;line-height:1.3}
+.crumb{color:var(--mute);font-size:13px}
+.btn{font:inherit;border:1px solid var(--line);background:var(--panel);color:var(--ink);padding:9px 16px;border-radius:8px;cursor:pointer;font-weight:500}
+.btn.pri{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+.btn.danger{color:var(--warn)}
+.btn.sm{padding:5px 11px;font-size:13px}
+.btn:hover{filter:brightness(.96)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px}
+.stat b{display:block;font-size:26px;line-height:1.2}
+.stat span{color:var(--mute);font-size:13px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto}
+.tabs button{all:unset;box-sizing:border-box;padding:10px 16px;cursor:pointer;color:var(--mute);border-bottom:3px solid transparent;white-space:nowrap}
+.tabs button[aria-selected=true]{color:var(--brand);border-color:var(--brand);font-weight:600}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px}
+.tools{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.tools input{flex:1;min-width:200px}
+input,textarea{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+input[readonly]{opacity:.75}
+.wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:720px}
+th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:13px;color:var(--mute);font-weight:500;background:var(--bg)}
+tbody tr:hover{background:var(--tint)}
+.hn{display:inline-block;font-weight:600;background:var(--tag);border:1px dashed var(--tag-line);border-radius:6px;padding:1px 9px;font-variant-numeric:tabular-nums;letter-spacing:.02em}
+.acts{display:flex;gap:6px;justify-content:flex-end}
+.empty{text-align:center;padding:36px 10px;color:var(--mute)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+.f{display:flex;flex-direction:column;gap:4px}
+.f.full{grid-column:1/-1}
+label{font-weight:500;font-size:14px}
+label small{color:var(--mute);font-weight:400}
+.hint{font-size:12px;color:var(--mute);display:flex;justify-content:space-between}
+.err{color:var(--warn);font-size:13px;min-height:0}
+.bad{border-color:var(--warn)}
+.formact{grid-column:1/-1;display:flex;gap:10px;justify-content:flex-end;padding-top:8px}
+.pill{display:inline-block;background:var(--tint);color:var(--brand);border-radius:99px;padding:1px 10px;font-size:12px}
+dialog{border:none;border-radius:14px;padding:0;max-width:520px;width:calc(100% - 32px);background:var(--panel);color:var(--ink)}
+dialog::backdrop{background:rgba(5,20,20,.55)}
+.dh{padding:20px 22px;background:var(--tag);border-bottom:2px dashed var(--tag-line);color:#2b2508}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .dh{color:#f4e9b6}}
+.dh h2{margin:4px 0 0;font-size:20px}
+dl{margin:0;padding:18px 22px;display:grid;grid-template-columns:130px 1fr;gap:10px 12px}
+dt{color:var(--mute);font-size:14px}dd{margin:0;word-break:break-word}
+.df{padding:0 22px 20px;display:flex;justify-content:flex-end;gap:8px}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:99px;opacity:0;pointer-events:none;transition:.25s;z-index:9}
+#toast.on{opacity:1;transform:translate(-50%,0)}
+.mono{font-variant-numeric:tabular-nums}.user{margin:28px 8px 0;padding-top:14px;border-top:1px solid rgba(255,255,255,.18);font-size:13px;display:flex;flex-direction:column;gap:2px}.user b{color:#fff}select{font:inherit;width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}select:focus-visible{outline:3px solid var(--brand);outline-offset:2px}.tools select{width:auto;min-width:180px}.pv{display:none;margin-top:6px;padding:10px 12px;border-radius:8px;background:var(--tint);font-size:14px}.pv.on{display:block}.doc{padding:24px 28px;line-height:1.9}.doc h2{margin:0;text-align:center;font-size:22px}.doc .c{text-align:center;color:var(--mute);font-size:14px;line-height:1.6}.doc p{margin:12px 0}.sig{margin-top:30px;text-align:right}#cdlg{max-width:680px}.inl{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:flex-start}.inl .f{flex:1;min-width:190px}.inl .btn{margin-top:26px}.pill.off{background:var(--bg);color:var(--mute)}.pill.warn{background:var(--warn-tint);color:var(--warn)}.rr{display:flex;justify-content:space-between;gap:12px;padding:5px 0;border-bottom:1px dashed var(--line)}.rr.tot{font-weight:600;font-size:17px}.tiny{font-size:12px;color:var(--mute);margin-top:16px;text-align:center}.wv{color:var(--warn);font-weight:600}.pill.amber{background:var(--tag);color:var(--ink)}.qb{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;align-items:start}.qc{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px}.qc h3{margin:0 0 10px;font-size:15px;display:flex;justify-content:space-between;align-items:center}.qk{background:var(--bg);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:10px;padding:10px 12px;margin-bottom:10px;line-height:1.5}.qk.p1{border-left-color:var(--warn)}.qk.p2{border-left-color:var(--tag-line)}.qk .qn{font-size:24px;font-weight:700;line-height:1.1}.now{display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:var(--tint);border-radius:12px;padding:12px 16px;margin-bottom:14px}.now b{font-size:22px}@media (max-width:820px){.qb{grid-template-columns:1fr}}.vit{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.vit div{border:1px solid var(--line);border-radius:10px;padding:8px 6px;text-align:center;line-height:1.4}.vit b{display:block;font-size:18px}.vit small{color:var(--mute)}.vit .w{border-color:var(--warn);background:var(--warn-tint);color:var(--warn)}.vit .w small{color:var(--warn)}@media print{.app,#toast,.df{display:none!important}dialog{max-width:none;width:100%;box-shadow:none}}
+@media (max-width:820px){.app{grid-template-columns:1fr}aside{position:static;height:auto;padding:12px}nav{display:flex;gap:4px;overflow-x:auto;margin-top:8px}nav .sub{display:none}nav button{width:auto;white-space:nowrap}.user{display:none}.logo{padding:0}main{padding:18px 14px 40px}.stats{grid-template-columns:1fr 1fr 1fr;gap:8px}.stat{padding:10px 12px}.stat b{font-size:20px}form{grid-template-columns:1fr}dl{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside>
+  <div class="logo"><i></i><div>โรงพยาบาลมหาราชนครราชสีมา<small>Hospital Information System</small></div></div>
+  <nav aria-label="เมนูหลัก">
+    <div class="sub">ระบบงาน</div>
+    <button id='n-pt' aria-current='page'>ระบบผู้ป่วย</button><button id='n-visit'>ระบบเข้ารับบริการ</button><button id='n-cert'>ระบบใบรับรองแพทย์</button><button id='n-staff'>ระบบบุคลากร</button><button id='n-fin'>ระบบการเงิน</button><button id='n-scr'>ระบบคัดกรองและประวัติ</button><button id='n-chg'>ระบบค่าใช้จ่ายคนไข้</button><button id='n-que'>ระบบคิวตรวจ</button>
+    <button disabled>ระบบแพทย์</button>
+    <button disabled>ระบบนัดหมาย</button>
+    <button disabled>ระบบห้องยา</button>
+    <div class="sub">ตั้งค่า</div>
+    <button id="theme">สลับโหมดมืด / สว่าง</button>
+  </nav><div class="user"><b>เจ้าหน้าที่เวชระเบียน</b><span id="today"></span></div>
+</aside>
+<main><div id='v-pt'>
+  <header class="top">
+    <div><div class="crumb">ระบบผู้ป่วย › บันทึกผู้ป่วย</div><h1>ข้อมูลผู้ป่วย</h1></div>
+    <button class="btn pri" id="goNew">+ เพิ่มผู้ป่วยใหม่</button>
+  </header>
+  <section class="stats" aria-label="สรุป">
+    <div class="stat"><b id="sTotal">0</b><span>ผู้ป่วยทั้งหมด</span></div>
+    <div class="stat"><b id="sAge">0</b><span>อายุเฉลี่ย (ปี)</span></div>
+    <div class="stat"><b id="sMail">0</b><span>มีอีเมลติดต่อ</span></div>
+  </section>
+  <div class="tabs" role="tablist">
+    <button role="tab" id="t-list" aria-selected="true">รายชื่อผู้ป่วย</button>
+    <button role="tab" id="t-form" aria-selected="false">บันทึกผู้ป่วย</button>
+    
+  </div>
+
+  <section id="p-list" class="card">
+    <div class="tools"><input id="q" type="search" placeholder="ค้นหาด้วย HN, เลขบัตรประชาชน, ชื่อ หรือเบอร์โทร" aria-label="ค้นหาผู้ป่วย"></div>
+    <div class="wrap"><table>
+      <thead><tr><th>HN</th><th>ชื่อ - นามสกุล</th><th>เลขบัตรประชาชน</th><th>อายุ</th><th>เบอร์โทรศัพท์</th><th></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table></div>
+  </section>
+
+  <section id="p-form" class="card" hidden>
+    <h2 id="fTitle" style="margin:0 0 16px;font-size:18px">เพิ่มผู้ป่วยใหม่</h2>
+    <form id="f" novalidate>
+      <div class="f"><label for="HN">รหัสประจำตัวผู้ป่วย</label><input id="HN" maxlength="15" autocomplete="off"><div class="err"></div><div class="hint"><span>สร้างให้อัตโนมัติ</span></div></div>
+      <div class="f"><label for="ID">เลขบัตรประชาชน 13 หลัก</label><input id="ID" maxlength="13" inputmode="numeric" placeholder="1234567890123" autocomplete="off"><div class="err"></div><div class="hint"><span>ตัวเลข 13 หลัก</span><span id="idc">0/13</span></div></div>
+      <div class="f full"><label for="NM">ชื่อ - นามสกุล</label><input id="NM" maxlength="150" placeholder="เช่น นางสาวสมหญิง ใจดี"><div class="err"></div></div>
+      <div class="f"><label for="BD">วันเดือนปีเกิด</label><input id="BD" type="date"><div class="err"></div></div>
+      <div class="f"><label for="PH">เบอร์โทรศัพท์ที่ติดต่อได้</label><input id="PH" maxlength="20" inputmode="tel" placeholder="081-234-5678"><div class="err"></div></div>
+      <div class="f full"><label for="EM">อีเมลผู้ป่วย <small>ไม่บังคับ</small></label><input id="EM" type="email" maxlength="100" placeholder="name@example.com"><div class="err"></div></div>
+      <div class="f full"><label for="AD">ที่อยู่ตามทะเบียนบ้าน / ที่ติดต่อได้</label><textarea id="AD" rows="3" placeholder="บ้านเลขที่ ถนน ตำบล อำเภอ จังหวัด รหัสไปรษณีย์"></textarea><div class="err"></div></div>
+      <div class="formact"><button type="button" class="btn" id="cancel">ยกเลิก</button><button class="btn pri" type="submit" id="save">บันทึกผู้ป่วย</button></div>
+    </form>
+  </section>
+
+  
+</div>
+<div id='v-visit' hidden>
+<header class='top'><div><div class='crumb'>ระบบเข้ารับบริการ › บันทึกการเข้ารับบริการ</div><h1>การเข้ารับบริการ</h1></div><button class='btn pri' id='goVisit'>+ ลงทะเบียนเข้ารับบริการ</button></header>
+<section class='stats' aria-label='สรุป'><div class='stat'><b id='vToday'>0</b><span>เข้ารับบริการวันนี้</span></div><div class='stat'><b id='vTotal'>0</b><span>เข้ารับบริการทั้งหมด</span></div><div class='stat'><b id='vTop'>-</b><span>แผนกที่มีผู้ใช้บริการมากที่สุด</span></div></section>
+<div class='tabs' role='tablist'><button role='tab' id='vt-list' aria-selected='true'>รายการเข้ารับบริการ</button><button role='tab' id='vt-form' aria-selected='false'>ลงทะเบียนเข้ารับบริการ</button></div>
+<section id='vp-list' class='card'>
+<div class='tools'><input id='vq' type='search' placeholder='ค้นหาด้วย VN, รหัสประจำตัวผู้ป่วย หรือชื่อ' aria-label='ค้นหาการเข้ารับบริการ'><select id='vdep' aria-label='กรองตามแผนก'></select></div>
+<div class='wrap'><table><thead><tr><th>VN</th><th>รหัสประจำตัวผู้ป่วย</th><th>ชื่อ - นามสกุล</th><th>แผนก</th><th>วันและเวลาที่เข้ารับบริการ</th><th></th></tr></thead><tbody id='vrows'></tbody></table></div>
+</section>
+<section id='vp-form' class='card' hidden>
+<h2 style='margin:0 0 16px;font-size:18px'>ลงทะเบียนเข้ารับบริการ</h2>
+<form id='vf' novalidate>
+<div class='f'><label for='VN'>รหัสการเข้ารับบริการ (VN)</label><input id='VN' readonly><div class='hint'><span>สร้างให้อัตโนมัติตามวันที่เข้ารับบริการ</span></div></div>
+<div class='f'><label for='VD'>วันและเวลาที่เข้ารับบริการ</label><input id='VD' type='datetime-local'><div class='err'></div></div>
+<div class='f full'><label for='VH'>รหัสประจำตัวผู้ป่วย</label><select id='VH'></select><div class='err'></div><div id='pv' class='pv'></div></div>
+<div class='f full'><label for='VP'>แผนกที่เข้ารับบริการ</label><select id='VP'></select><div class='err'></div></div>
+<div class='formact'><button type='button' class='btn' id='vcancel'>ยกเลิก</button><button class='btn pri' type='submit'>บันทึกการเข้ารับบริการ</button></div>
+</form>
+</section>
+</div>
+<div id='v-cert' hidden>
+<header class='top'><div><div class='crumb'>ระบบใบรับรองแพทย์ › บันทึกใบรับรองแพทย์</div><h1>ใบรับรองแพทย์</h1></div><button class='btn pri' id='goCert'>+ ออกใบรับรองแพทย์</button></header>
+<section class='stats' aria-label='สรุป'><div class='stat'><b id='cToday'>0</b><span>ออกใบรับรองวันนี้</span></div><div class='stat'><b id='cTotal'>0</b><span>ใบรับรองทั้งหมด</span></div><div class='stat'><b id='cAvg'>0</b><span>วันหยุดพักเฉลี่ย (วัน)</span></div></section>
+<div class='tabs' role='tablist'><button role='tab' id='ct-list' aria-selected='true'>รายการใบรับรองแพทย์</button><button role='tab' id='ct-form' aria-selected='false'>ออกใบรับรองแพทย์</button></div>
+<section id='cp-list' class='card'>
+<div class='tools'><input id='cq' type='search' placeholder='ค้นหาด้วยเลขที่ใบรับรอง, VN, ชื่อผู้ป่วย หรือแพทย์' aria-label='ค้นหาใบรับรองแพทย์'></div>
+<div class='wrap'><table><thead><tr><th>เลขที่ใบรับรอง</th><th>ผู้ป่วย</th><th>แพทย์ผู้ออก</th><th>หยุดพักรักษาตัว</th><th>วันที่ออก</th><th></th></tr></thead><tbody id='crows'></tbody></table></div>
+</section>
+<section id='cp-form' class='card' hidden>
+<h2 style='margin:0 0 16px;font-size:18px'>ออกใบรับรองแพทย์</h2>
+<form id='cf' novalidate>
+<div class='f'><label for='CN'>เลขที่ใบรับรองแพทย์</label><input id='CN' readonly><div class='hint'><span>สร้างให้อัตโนมัติตามวันที่ออกเอกสาร</span></div></div>
+<div class='f'><label for='CI'>วันที่ออกเอกสารใบรับรองแพทย์</label><input id='CI' type='date'><div class='err'></div></div>
+<div class='f full'><label for='VC'>รหัสการเข้ารับบริการ (VN)</label><select id='VC'></select><div class='err'></div><div id='cpv' class='pv'></div></div>
+<div class='f'><label for='CD'>แพทย์ผู้ออกใบรับรอง</label><select id='CD'></select><div class='err'></div></div>
+<div class='f'><label for='CR'>จำนวนวันที่สั่งให้หยุดพักรักษาตัว (วัน)</label><input id='CR' type='number' min='1' max='365' step='1' inputmode='numeric'><div class='err'></div></div>
+<div class='f'><label for='CS'>วันที่เริ่มต้นให้หยุดพัก</label><input id='CS' type='date'><div class='err'></div></div>
+<div class='f'><label for='CE'>วันที่สิ้นสุดการหยุดพัก</label><input id='CE' readonly><div class='hint'><span>คำนวณจากวันที่เริ่มต้นและจำนวนวัน</span></div></div>
+<div class='f full'><label for='CDX'>สรุปผลการวินิจฉัย / อาการที่ระบุในใบรับรอง</label><textarea id='CDX' rows='3' placeholder='เช่น ไข้หวัดใหญ่ มีไข้สูง ไอ เจ็บคอ'></textarea><div class='err'></div></div>
+<div class='f full'><label for='CCM'>คำแนะนำหรือความเห็นแพทย์เพิ่มเติม <small>ไม่บังคับ</small></label><textarea id='CCM' rows='2'></textarea></div>
+<div class='formact'><button type='button' class='btn' id='ccancel'>ยกเลิก</button><button class='btn pri' type='submit'>บันทึกใบรับรองแพทย์</button></div>
+</form>
+</section>
+</div>
+<div id='v-staff' hidden>
+<header class='top'><div><div class='crumb'>ระบบบุคลากร › บันทึกบุคลากร</div><h1>บุคลากร</h1></div><button class='btn pri' id='goStaff'>+ เพิ่มบุคลากร</button></header>
+<section class='stats' aria-label='สรุป'><div class='stat'><b id='sTot'>0</b><span>บุคลากรทั้งหมด</span></div><div class='stat'><b id='sDoc'>0</b><span>แพทย์</span></div><div class='stat'><b id='sAcc'>0</b><span>มีบัญชีผู้ใช้งาน</span></div></section>
+<div class='tabs' role='tablist'><button role='tab' id='stt-list' aria-selected='true'>รายชื่อบุคลากร</button><button role='tab' id='stt-form' aria-selected='false'>บันทึกบุคลากร</button><button role='tab' id='stt-role' aria-selected='false'>ตำแหน่ง</button><button role='tab' id='stt-dep' aria-selected='false'>แผนก</button><button role='tab' id='stt-acc' aria-selected='false'>บัญชีผู้ใช้งาน</button></div>
+<section id='stp-list' class='card'>
+<div class='tools'><input id='sq' type='search' placeholder='ค้นหาด้วยรหัส ชื่อ เบอร์โทร หรืออีเมล' aria-label='ค้นหาบุคลากร'><select id='srole' aria-label='กรองตามตำแหน่ง'></select></div>
+<div class='wrap'><table><thead><tr><th>รหัสเจ้าหน้าที่</th><th>ชื่อ - นามสกุล</th><th>ตำแหน่ง</th><th>แผนก</th><th>เบอร์โทรศัพท์</th><th>บัญชีผู้ใช้</th><th></th></tr></thead><tbody id='srows'></tbody></table></div>
+</section>
+<section id='stp-form' class='card' hidden>
+<h2 id='sfTitle' style='margin:0 0 16px;font-size:18px'>เพิ่มบุคลากรใหม่</h2>
+<form id='sf' novalidate>
+<div class='f'><label for='EID'>รหัสประจำตัวเจ้าหน้าที่</label><input id='EID' readonly><div class='hint'><span>สร้างให้อัตโนมัติ</span></div></div>
+<div class='f'><label for='ERL'>ตำแหน่ง / หน้าที่</label><select id='ERL'></select><div class='err'></div></div>
+<div class='f full'><label for='ENM'>ชื่อ - นามสกุล บุคลากร</label><input id='ENM' maxlength='150' placeholder='เช่น นพ.สมชาย ใจดี'><div class='err'></div></div>
+<div class='f'><label for='EPH'>เบอร์โทรศัพท์ที่ติดต่อ</label><input id='EPH' maxlength='20' inputmode='tel' placeholder='081-234-5678'><div class='err'></div></div>
+<div class='f'><label for='EEM'>อีเมลบุคลากร</label><input id='EEM' type='email' maxlength='100' placeholder='name@hospital.example'><div class='err'></div></div>
+<div class='f full'><label for='EDP'>แผนกที่สังกัด</label><select id='EDP'></select><div class='err'></div></div>
+<div class='formact'><button type='button' class='btn' id='scancel'>ยกเลิก</button><button class='btn pri' type='submit' id='ssave'>บันทึกบุคลากร</button></div>
+</form>
+</section>
+<section id='stp-role' class='card' hidden>
+<form class='inl' id='rf' novalidate><div class='f'><label for='RNM'>ชื่อตำแหน่ง</label><input id='RNM' maxlength='100' placeholder='เช่น แพทย์, เภสัชกร, พยาบาล'><div class='err'></div></div><button class='btn pri'>+ เพิ่มตำแหน่ง</button></form>
+<div class='wrap'><table><thead><tr><th>รหัสตำแหน่ง</th><th>ชื่อตำแหน่ง</th><th>บุคลากร</th><th></th></tr></thead><tbody id='rrows'></tbody></table></div>
+</section>
+<section id='stp-dep' class='card' hidden>
+<form class='inl' id='df' novalidate><div class='f'><label for='DNM'>ชื่อแผนก</label><input id='DNM' maxlength='150' placeholder='เช่น เวชระเบียน, รังสีวิทยา'><div class='err'></div></div><div class='f'><label for='DLC'>สถานที่ตั้ง (อาคาร / ชั้น)</label><input id='DLC' maxlength='255' placeholder='เช่น อาคารผู้ป่วยนอก ชั้น 2'><div class='err'></div></div><button class='btn pri'>+ เพิ่มแผนก</button></form>
+<div class='wrap'><table><thead><tr><th>รหัสแผนก</th><th>ชื่อแผนก</th><th>สถานที่ตั้ง</th><th>บุคลากร</th><th></th></tr></thead><tbody id='drows'></tbody></table></div>
+</section>
+<section id='stp-acc' class='card' hidden>
+<form class='inl' id='af' novalidate><div class='f'><label for='ACE'>บุคลากร</label><select id='ACE'></select><div class='err'></div></div><div class='f'><label for='AUN'>ชื่อผู้ใช้งาน</label><input id='AUN' maxlength='50' autocomplete='off'><div class='err'></div></div><div class='f'><label for='APW'>รหัสผ่าน</label><input id='APW' type='password' autocomplete='new-password'><div class='err'></div></div><div class='f'><label for='APW2'>ยืนยันรหัสผ่าน</label><input id='APW2' type='password' autocomplete='new-password'><div class='err'></div></div><button class='btn pri'>+ สร้างบัญชี</button></form>
+<div class='wrap'><table><thead><tr><th>รหัสบัญชี</th><th>บุคลากร</th><th>ชื่อผู้ใช้งาน</th><th>รหัสผ่าน</th><th></th></tr></thead><tbody id='arows'></tbody></table></div>
+</section>
+</div>
+<div id='v-fin' hidden>
+<header class='top'><div><div class='crumb'>ระบบการเงินและการชำระเงิน › บันทึกการชำระเงิน</div><h1>การเงินและการชำระเงิน</h1></div><button class='btn pri' id='goBill'>+ สร้างใบแจ้งหนี้</button></header>
+<section class='stats' aria-label='สรุป'><div class='stat'><b id='fPend'>0</b><span>ใบแจ้งหนี้รอชำระ</span></div><div class='stat'><b id='fDue'>0.00</b><span>ยอดค้างชำระ (บาท)</span></div><div class='stat'><b id='fToday'>0.00</b><span>รับชำระวันนี้ (บาท)</span></div></section>
+<div class='tabs' role='tablist'><button role='tab' id='ft-bill' aria-selected='true'>ใบแจ้งหนี้</button><button role='tab' id='ft-billf' aria-selected='false'>สร้างใบแจ้งหนี้</button><button role='tab' id='ft-pay' aria-selected='false'>การรับชำระเงิน</button><button role='tab' id='ft-payf' aria-selected='false'>รับชำระเงิน</button></div>
+<section id='fp-bill' class='card'>
+<div class='tools'><input id='bq' type='search' placeholder='ค้นหาด้วยเลขที่ใบแจ้งหนี้ VN หรือชื่อผู้ป่วย' aria-label='ค้นหาใบแจ้งหนี้'><select id='bst' aria-label='กรองตามสถานะ'><option value=''>ทุกสถานะ</option><option value='Pending'>รอชำระ</option><option value='Paid'>ชำระแล้ว</option></select></div>
+<div class='wrap'><table><thead><tr><th>เลขที่ใบแจ้งหนี้</th><th>ผู้ป่วย / VN</th><th>ยอดรวม</th><th>เบิกได้</th><th>ส่วนลด</th><th>สุทธิ</th><th>สถานะ</th><th></th></tr></thead><tbody id='brows'></tbody></table></div>
+</section>
+<section id='fp-billf' class='card' hidden>
+<h2 style='margin:0 0 16px;font-size:18px'>สร้างใบแจ้งหนี้ค่ารักษาพยาบาล</h2>
+<form id='bf' novalidate>
+<div class='f'><label for='FBN'>เลขที่ใบแจ้งหนี้</label><input id='FBN' readonly><div class='hint'><span>สร้างให้อัตโนมัติ</span></div></div>
+<div class='f'><label for='FST'>สถานะใบแจ้งหนี้</label><input id='FST' readonly value='รอชำระ (Pending)'></div>
+<div class='f full'><label for='FV'>รหัสการเข้ารับบริการ (VN)</label><select id='FV'></select><div class='err'></div><div id='fpv' class='pv'></div></div>
+<div class='f'><label for='FTOT'>ยอดรวมค่าใช้จ่ายทั้งหมด (บาท)</label><input id='FTOT' type='number' min='0' max='99999999.99' step='0.01' inputmode='decimal'><div class='err'></div></div>
+<div class='f'><label for='FCOV'>ยอดเบิกได้ตามสิทธิการรักษา (บาท)</label><input id='FCOV' type='number' min='0' max='99999999.99' step='0.01' inputmode='decimal'><div class='err'></div></div>
+<div class='f'><label for='FDIS'>ยอดส่วนลดพิเศษ (บาท)</label><input id='FDIS' type='number' min='0' max='99999999.99' step='0.01' inputmode='decimal'><div class='err'></div></div>
+<div class='f'><label for='FNET'>ยอดสุทธิที่ต้องชำระ (บาท)</label><input id='FNET' readonly><div class='err'></div></div>
+<div class='formact'><button type='button' class='btn' id='bcancel'>ยกเลิก</button><button class='btn pri' type='submit'>บันทึกใบแจ้งหนี้</button></div>
+</form>
+</section>
+<section id='fp-pay' class='card' hidden>
+<div class='tools'><input id='pq' type='search' placeholder='ค้นหาด้วยเลขที่ใบเสร็จ ใบแจ้งหนี้ หรือชื่อผู้ป่วย' aria-label='ค้นหาการรับชำระเงิน'></div>
+<div class='wrap'><table><thead><tr><th>เลขที่ใบเสร็จ</th><th>ใบแจ้งหนี้</th><th>ผู้ป่วย</th><th>วันและเวลาที่ชำระ</th><th>วิธีชำระ</th><th>รับชำระ</th><th>เงินทอน</th><th>ผู้รับชำระ</th><th></th></tr></thead><tbody id='prows'></tbody></table></div>
+</section>
+<section id='fp-payf' class='card' hidden>
+<h2 style='margin:0 0 16px;font-size:18px'>รับชำระเงิน</h2>
+<form id='pf' novalidate>
+<div class='f'><label for='FRN'>เลขที่ใบเสร็จ</label><input id='FRN' readonly><div class='hint'><span>สร้างให้อัตโนมัติ และออกใบเสร็จอิเล็กทรอนิกส์ให้หลังบันทึก</span></div></div>
+<div class='f'><label for='FDT'>วันและเวลาที่ชำระเงิน</label><input id='FDT' type='datetime-local'><div class='err'></div></div>
+<div class='f full'><label for='FB'>ใบแจ้งหนี้ที่รอชำระ</label><select id='FB'></select><div class='err'></div><div id='fpv2' class='pv'></div></div>
+<div class='f'><label for='FMD'>วิธีชำระเงิน</label><select id='FMD'><option value='Cash'>เงินสด (Cash)</option><option value='Scan QR'>สแกน QR (Scan QR)</option><option value='Card'>บัตร (Card)</option></select><div class='err'></div></div>
+<div class='f'><label for='FCS'>เจ้าหน้าที่การเงินผู้รับชำระ</label><select id='FCS'></select><div class='err'></div></div>
+<div class='f'><label for='FPD'>ยอดเงินที่รับชำระจริง (บาท)</label><input id='FPD' type='number' min='0' max='99999999.99' step='0.01' inputmode='decimal'><div class='err'></div></div>
+<div class='f'><label for='FCG'>เงินทอน (บาท)</label><input id='FCG' readonly></div>
+<div class='formact'><button type='button' class='btn' id='pcancel'>ยกเลิก</button><button class='btn pri' type='submit'>บันทึกการรับชำระเงิน</button></div>
+</form>
+</section>
+</div>
+<div id='v-scr' hidden>
+<header class='top'><div><div class='crumb'>ระบบคัดกรองและประวัติคนไข้ › บันทึกการซักประวัติ</div><h1>คัดกรองและประวัติคนไข้</h1></div><button class='btn pri' id='goHist'>+ บันทึกการคัดกรอง</button></header>
+<section class='stats' aria-label='สรุป'><div class='stat'><b id='hToday'>0</b><span>ซักประวัติวันนี้</span></div><div class='stat'><b id='hAl'>0</b><span>มีประวัติแพ้</span></div><div class='stat'><b id='hAb'>0</b><span>สัญญาณชีพผิดปกติ</span></div></section>
+<div class='tabs' role='tablist'><button role='tab' id='ht-list' aria-selected='true'>ประวัติการคัดกรอง</button><button role='tab' id='ht-form' aria-selected='false'>บันทึกการคัดกรอง</button></div>
+<section id='hp-list' class='card'>
+<div class='tools'><input id='hq' type='search' placeholder='ค้นหาด้วยเลขที่บันทึก VN ชื่อผู้ป่วย หรืออาการสำคัญ' aria-label='ค้นหาประวัติการคัดกรอง'><select id='hfl' aria-label='กรอง'><option value=''>ทั้งหมด</option><option value='al'>มีประวัติแพ้</option><option value='ab'>สัญญาณชีพผิดปกติ</option></select></div>
+<div class='wrap'><table><thead><tr><th>เลขที่บันทึก</th><th>ผู้ป่วย / VN</th><th>อาการสำคัญ</th><th>สัญญาณชีพ</th><th>ประวัติแพ้</th><th>วันและเวลา</th><th></th></tr></thead><tbody id='hrows'></tbody></table></div>
+</section>
+<section id='hp-form' class='card' hidden>
+<h2 id='hfTitle' style='margin:0 0 16px;font-size:18px'>บันทึกการคัดกรอง</h2>
+<form id='hf' novalidate>
+<div class='f'><label for='HID'>รหัสการบันทึกประวัติ</label><input id='HID' readonly><div class='hint'><span>สร้างให้อัตโนมัติ</span></div></div>
+<div class='f'><label for='HDT'>วันและเวลาที่ซักประวัติ</label><input id='HDT' type='datetime-local'><div class='err'></div></div>
+<div class='f full'><label for='HVN'>รหัสการเข้ารับบริการ (VN)</label><select id='HVN'></select><div class='err'></div><div id='hpv' class='pv'></div></div>
+<div class='f full'><label for='HEM'>เจ้าหน้าที่ / พยาบาลผู้ซักประวัติ</label><select id='HEM'></select><div class='err'></div></div>
+<div class='f full'><label for='HCC'>อาการสำคัญที่มาโรงพยาบาล</label><textarea id='HCC' rows='2' placeholder='เช่น ไข้ ไอ เจ็บคอ 3 วัน'></textarea><div class='err'></div></div>
+<div class='f full'><label for='HPI'>ประวัติเจ็บป่วยปัจจุบัน <small>ไม่บังคับ</small></label><textarea id='HPI' rows='3'></textarea></div>
+<div class='f'><label for='HPM'>ประวัติเจ็บป่วยในอดีต <small>ไม่บังคับ</small></label><textarea id='HPM' rows='3' placeholder='โรคประจำตัว การผ่าตัด'></textarea></div>
+<div class='f'><label for='HAL'>ประวัติการแพ้ยา / แพ้อาหาร</label><textarea id='HAL' rows='3' placeholder='ถ้าไม่มี ให้กดปุ่มด้านล่าง'></textarea><div class='err'></div><div><button type='button' class='btn sm' id='HNOA'>ไม่มีประวัติแพ้</button></div></div>
+<div class='f full'><label for='HCM'>ประวัติยาเดิมที่กำลังรับประทานอยู่ <small>ไม่บังคับ</small></label><textarea id='HCM' rows='2'></textarea></div>
+<div class='f full'><b style='font-size:15px;padding-top:6px'>สัญญาณชีพและร่างกาย</b></div>
+<div class='f'><label for='HBP'>ความดันโลหิต (mmHg)</label><input id='HBP' maxlength='20' placeholder='120/80'><div class='err'></div></div>
+<div class='f'><label for='HTP'>อุณหภูมิร่างกาย (°C)</label><input id='HTP' type='number' step='0.1' min='30' max='45' inputmode='decimal' placeholder='36.5'><div class='err'></div></div>
+<div class='f'><label for='HPR'>อัตราการเต้นของหัวใจ (ครั้ง/นาที)</label><input id='HPR' type='number' step='1' min='20' max='250' inputmode='numeric' placeholder='80'><div class='err'></div></div>
+<div class='f'><label for='HRR'>อัตราการหายใจ (ครั้ง/นาที)</label><input id='HRR' type='number' step='1' min='4' max='80' inputmode='numeric' placeholder='18'><div class='err'></div></div>
+<div class='f'><label for='HWT'>น้ำหนักตัว (กิโลกรัม)</label><input id='HWT' type='number' step='0.1' min='0.5' max='500' inputmode='decimal'><div class='err'></div></div>
+<div class='f'><label for='HHT'>ส่วนสูง (เซนติเมตร)</label><input id='HHT' type='number' step='0.1' min='20' max='250' inputmode='decimal'><div class='err'></div></div>
+<div class='f full'><label for='HBMI'>ค่าดัชนีมวลกาย (BMI) <small>คำนวณให้ ไม่บันทึกลงฐานข้อมูล</small></label><input id='HBMI' readonly></div>
+<div class='formact'><button type='button' class='btn' id='hcancel'>ยกเลิก</button><button class='btn pri' type='submit' id='hsave'>บันทึกการคัดกรอง</button></div>
+</form>
+</section>
+</div>
+<div id='v-chg' hidden>
+<header class='top'><div><div class='crumb'>ระบบค่าใช้จ่ายคนไข้ › บันทึกค่าใช้จ่ายคนไข้</div><h1>ค่าใช้จ่ายคนไข้</h1></div><button class='btn pri' id='goChg'>+ บันทึกค่าใช้จ่าย</button></header>
+<section class='stats' aria-label='สรุป'><div class='stat'><b id='gToday'>0</b><span>บันทึกวันนี้ (รายการ)</span></div><div class='stat'><b id='gSum'>0.00</b><span>ยอดค่าใช้จ่ายรวม (บาท)</span></div><div class='stat'><b id='gUn'>0</b><span>VN ที่รอออกใบแจ้งหนี้</span></div></section>
+<div class='tabs' role='tablist'><button role='tab' id='gt-list' aria-selected='true'>ค่าใช้จ่ายของผู้ป่วย</button><button role='tab' id='gt-form' aria-selected='false'>บันทึกค่าใช้จ่าย</button><button role='tab' id='gt-item' aria-selected='false'>รายการค่าบริการ</button></div>
+<section id='gp-list' class='card'>
+<div class='tools'><input id='gq' type='search' placeholder='ค้นหาด้วยเลขที่รายการ VN ชื่อผู้ป่วย หรือชื่อค่าบริการ' aria-label='ค้นหาค่าใช้จ่าย'><select id='gfl' aria-label='กรอง'><option value=''>ทั้งหมด</option><option value='un'>ยังไม่ออกใบแจ้งหนี้</option></select></div>
+<div class='wrap'><table><thead><tr><th>เลขที่รายการ</th><th>ผู้ป่วย / VN</th><th>รายการบริการ</th><th>จำนวน</th><th>จำนวนเงิน</th><th>แพทย์</th><th>วันและเวลา</th><th></th></tr></thead><tbody id='grows'></tbody></table></div>
+</section>
+<section id='gp-form' class='card' hidden>
+<h2 id='gfTitle' style='margin:0 0 16px;font-size:18px'>บันทึกค่าใช้จ่ายของแพทย์</h2>
+<form id='gf' novalidate>
+<div class='f'><label for='GID'>รหัสรายการคิดค่าบริการ</label><input id='GID' readonly><div class='hint'><span>สร้างให้อัตโนมัติ</span></div></div>
+<div class='f'><label for='GDT'>วันและเวลาที่บันทึกค่าบริการ</label><input id='GDT' type='datetime-local'><div class='err'></div></div>
+<div class='f full'><label for='GVN'>รหัสการเข้ารับบริการ (VN)</label><select id='GVN'></select><div class='err'></div><div id='gpv' class='pv'></div></div>
+<div class='f'><label for='GDOC'>แพทย์ผู้บันทึกค่าบริการ</label><select id='GDOC'></select><div class='err'></div></div>
+<div class='f'><label for='GIT'>รายการบริการ / หัตถการ</label><select id='GIT'></select><div class='err'></div></div>
+<div class='f'><label for='GQT'>จำนวนครั้งที่ให้บริการ</label><input id='GQT' type='number' min='1' max='9999' step='1' inputmode='numeric'><div class='err'></div></div>
+<div class='f'><label for='GAM'>จำนวนเงินค่าบริการ (บาท)</label><input id='GAM' type='number' min='0' max='99999999.99' step='0.01' inputmode='decimal'><div class='hint'><span>คำนวณจากราคามาตรฐาน x จำนวน แก้ไขได้</span></div><div class='err'></div></div>
+<div class='f full'><label for='GRM'>หมายเหตุเพิ่มเติมจากแพทย์ <small>ไม่บังคับ</small></label><textarea id='GRM' rows='2'></textarea></div>
+<div class='formact'><button type='button' class='btn' id='gcancel'>ยกเลิก</button><button class='btn pri' type='submit' id='gsave'>บันทึกค่าใช้จ่าย</button></div>
+</form>
+</section>
+<section id='gp-item' class='card' hidden>
+<form class='inl' id='kf' novalidate><div class='f'><label for='KNM'>ชื่อค่าบริการ</label><input id='KNM' maxlength='150' placeholder='เช่น Doctor Fee, ค่าทำแผล'><div class='err'></div></div><div class='f'><label for='KPR'>อัตราค่าบริการมาตรฐาน (บาท)</label><input id='KPR' type='number' min='0' max='99999999.99' step='0.01' inputmode='decimal'><div class='err'></div></div><div class='f'><label for='KCT'>หมวดหมู่ค่าบริการ</label><input id='KCT' maxlength='50' list='kcl' autocomplete='off'><datalist id='kcl'></datalist><div class='err'></div></div><button class='btn pri'>+ เพิ่มรายการ</button></form>
+<div class='wrap'><table><thead><tr><th>รหัสรายการ</th><th>ชื่อค่าบริการ</th><th>หมวดหมู่</th><th>ราคามาตรฐาน</th><th>ใช้งาน</th><th></th></tr></thead><tbody id='krows'></tbody></table></div>
+</section>
+</div>
+<div id='v-que' hidden>
+<header class='top'><div><div class='crumb'>ระบบคิวตรวจ › บันทึกคิว</div><h1>คิวตรวจ</h1></div><button class='btn pri' id='goQue'>+ ออกบัตรคิว</button></header>
+<section class='stats' aria-label='สรุป'><div class='stat'><b id='qWait'>0</b><span>รอเรียก</span></div><div class='stat'><b id='qRoom'>0</b><span>กำลังตรวจ</span></div><div class='stat'><b id='qDone'>0</b><span>ตรวจเสร็จวันนี้</span></div></section>
+<div class='tabs' role='tablist'><button role='tab' id='qt-board' aria-selected='true'>กระดานคิววันนี้</button><button role='tab' id='qt-list' aria-selected='false'>รายการคิวทั้งหมด</button><button role='tab' id='qt-form' aria-selected='false'>ออกบัตรคิว</button></div>
+<section id='qp-board'>
+<div class='tools'><select id='qdep' aria-label='กรองตามแผนก'></select></div>
+<div class='now' id='qNow'></div>
+<div class='qb'><div class='qc'><h3>รอเรียก <span class='pill amber' id='qnw'>0</span></h3><div id='qcw'></div></div><div class='qc'><h3>กำลังตรวจ <span class='pill' id='qni'>0</span></h3><div id='qci'></div></div><div class='qc'><h3>ตรวจเสร็จ <span class='pill off' id='qnd'>0</span></h3><div id='qcd'></div></div></div>
+</section>
+<section id='qp-list' class='card' hidden>
+<div class='tools'><input id='qq' type='search' placeholder='ค้นหาด้วยหมายเลขคิว VN หรือชื่อผู้ป่วย' aria-label='ค้นหาคิว'><select id='qfs' aria-label='กรองสถานะ'><option value=''>ทุกสถานะ</option><option value='Waiting'>รอเรียก</option><option value='In-Room'>กำลังตรวจ</option><option value='Completed'>ตรวจเสร็จ</option><option value='Cancelled'>ยกเลิก</option></select></div>
+<div class='wrap'><table><thead><tr><th>รหัสลำดับคิว</th><th>หมายเลขคิว</th><th>ผู้ป่วย / VN</th><th>แผนก</th><th>วันที่</th><th>ความสำคัญ</th><th>สถานะ</th></tr></thead><tbody id='qrows'></tbody></table></div>
+</section>
+<section id='qp-form' class='card' hidden>
+<h2 style='margin:0 0 16px;font-size:18px'>ออกบัตรคิวตรวจ</h2>
+<form id='qf' novalidate>
+<div class='f'><label for='QID'>รหัสลำดับคิว</label><input id='QID' readonly><div class='hint'><span>สร้างให้อัตโนมัติ</span></div></div>
+<div class='f'><label for='QNM'>หมายเลขคิวที่เรียก</label><input id='QNM' readonly><div class='hint'><span>E = ฉุกเฉิน, U = เร่งด่วน, A = ปกติ</span></div></div>
+<div class='f'><label for='QDT'>วันที่ออกคิว</label><input id='QDT' type='date'><div class='err'></div></div>
+<div class='f'><label for='QPR'>ลำดับความสำคัญเร่งด่วน</label><select id='QPR'><option value='3'>3 - ปกติ</option><option value='2'>2 - เร่งด่วน</option><option value='1'>1 - ฉุกเฉิน</option></select><div class='err'></div></div>
+<div class='f full'><label for='QVN'>รหัสการเข้ารับบริการ (VN)</label><select id='QVN'></select><div class='err'></div><div id='qpv' class='pv'></div></div>
+<div class='f full'><label for='QST'>สถานะคิว</label><input id='QST' readonly value='รอเรียก (Waiting)'></div>
+<div class='formact'><button type='button' class='btn' id='qcancel'>ยกเลิก</button><button class='btn pri' type='submit'>ออกบัตรคิว</button></div>
+</form>
+</section>
+</div>
+</main>
+</div>
+
+<dialog id="dlg"><div class="dh"><span class="hn" id="dHN"></span><h2 id="dNM"></h2></div><dl id="dl"></dl><div class="df"><button class="btn" id="dClose">ปิด</button><button class="btn pri" id="dEdit">แก้ไขข้อมูล</button></div></dialog>
+<dialog id='hdlg'><div id='hdBody'></div><div class='df'><button class='btn' id='hdClose'>ปิด</button><button class='btn pri' id='hdPrint'>พิมพ์</button></div></dialog>
+<dialog id='fdlg'><div id='fdBody'></div><div class='df'><button class='btn' id='fdClose'>ปิด</button><button class='btn pri' id='fdPrint'>พิมพ์ใบเสร็จ</button></div></dialog>
+<dialog id='cdlg'><div id='cdBody'></div><div class='df'><button class='btn' id='cdClose'>ปิด</button><button class='btn pri' id='cdPrint'>พิมพ์ใบรับรอง</button></div></dialog>
+<div id="toast" role="status"></div>
+
+<script>
+var $=function(s){return document.querySelector(s)};
+var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+function mkId(n){var s=0;for(var i=0;i<12;i++)s+=+n[i]*(13-i);return n+((11-s%11)%10)}
+var pts=[
+ {HN:"HN000001",ID:mkId("110170012345"),NM:"นายสมชาย ใจดี",BD:"1985-03-14",AD:"123/4 ถ.สุขุมวิท แขวงคลองเตย เขตคลองเตย กรุงเทพฯ 10110",EM:"somchai@example.com",PH:"081-234-5678"},
+ {HN:"HN000002",ID:mkId("310050098765"),NM:"นางสาวพิมพ์ใจ รักสุข",BD:"1998-11-02",AD:"55 ม.3 ต.ในเมือง อ.เมือง จ.ขอนแก่น 40000",EM:"pimjai@example.com",PH:"089-765-4321"},
+ {HN:"HN000003",ID:mkId("150990045678"),NM:"นางมาลี สุขสบาย",BD:"1960-07-21",AD:"9 ซ.ลาดพร้าว 71 แขวงลาดพร้าว เขตลาดพร้าว กรุงเทพฯ 10230",EM:"",PH:"02-345-6789"}
+];
+var editing=null,viewing=null;
+
+
+function age(b){if(!b)return"-";var d=new Date(b),n=new Date(),a=n.getFullYear()-d.getFullYear();if(n.getMonth()<d.getMonth()||(n.getMonth()==d.getMonth()&&n.getDate()<d.getDate()))a--;return a}
+function thDate(b){return b?new Date(b).toLocaleDateString("th-TH",{day:"numeric",month:"long",year:"numeric"}):"-"}
+function fmtId(i){return i.replace(/(\d)(\d{4})(\d{5})(\d{2})(\d)/,"$1-$2-$3-$4-$5")}
+
+function render(){
+  var q=$("#q").value.trim().toLowerCase();
+  var list=pts.filter(function(p){return !q||[p.HN,p.ID,p.NM,p.PH].join(" ").toLowerCase().indexOf(q)>-1});
+  $("#rows").innerHTML=list.length?list.map(function(p){return '<tr><td><span class="hn">'+esc(p.HN)+'</span></td><td>'+esc(p.NM)+'</td><td class="mono">'+fmtId(esc(p.ID))+'</td><td>'+age(p.BD)+' ปี</td><td class="mono">'+esc(p.PH)+'</td><td><div class="acts"><button class="btn sm" data-v="'+esc(p.HN)+'">ดู</button><button class="btn sm" data-e="'+esc(p.HN)+'">แก้ไข</button><button class="btn sm danger" data-d="'+esc(p.HN)+'">ลบ</button></div></td></tr>'}).join(""):'<tr><td colspan="6" class="empty">'+(pts.length?"ไม่พบผู้ป่วยที่ตรงกับคำค้นหา":"ยังไม่มีข้อมูลผู้ป่วย กด เพิ่มผู้ป่วยใหม่ เพื่อเริ่มบันทึก")+'</td></tr>';
+  $("#sTotal").textContent=pts.length;
+  var ages=pts.map(function(p){return age(p.BD)}).filter(function(a){return a!=="-"});
+  $("#sAge").textContent=ages.length?Math.round(ages.reduce(function(a,b){return a+b},0)/ages.length):0;
+  $("#sMail").textContent=pts.filter(function(p){return p.EM}).length;
+}
+function tab(n){["list","form"].forEach(function(k){$("#p-"+k).hidden=k!=n;$("#t-"+k).setAttribute("aria-selected",k==n)})}
+["list","form"].forEach(function(k){$("#t-"+k).onclick=function(){if(k=="form")openForm();else tab(k)}});
+$("#goNew").onclick=function(){openForm()};
+$("#q").oninput=render;
+function nextHN(){var m=0;pts.forEach(function(p){var n=parseInt(p.HN.replace(/\D/g,""))||0;if(n>m)m=n});return "HN"+String(m+1).padStart(6,"0")}
+var F={HN:"#HN",ID:"#ID",NM:"#NM",BD:"#BD",PH:"#PH",EM:"#EM",AD:"#AD"};
+function clearErr(){Object.keys(F).forEach(function(k){var e=$(F[k]);e.classList.remove("bad");e.parentNode.querySelector(".err").textContent=""})}
+function openForm(p){
+  editing=p?p.HN:null;clearErr();
+  var v=p||{HN:nextHN(),ID:"",NM:"",BD:"",PH:"",EM:"",AD:""};
+  Object.keys(F).forEach(function(k){$(F[k]).value=v[k]});
+  $("#HN").readOnly=!!p;$("#idc").textContent=v.ID.length+"/13";
+  $("#fTitle").textContent=p?"แก้ไขข้อมูลผู้ป่วย "+p.HN:"เพิ่มผู้ป่วยใหม่";
+  $("#save").textContent=p?"บันทึกการแก้ไข":"บันทึกผู้ป่วย";
+  tab("form");$("#NM").focus();
+}
+$("#ID").oninput=function(){this.value=this.value.replace(/\D/g,"");$("#idc").textContent=this.value.length+"/13"};
+$("#cancel").onclick=function(){tab("list")};
+function setErr(k,m){var e=$(F[k]);e.classList.add("bad");e.parentNode.querySelector(".err").textContent=m;return 1}
+$("#f").onsubmit=function(ev){
+  ev.preventDefault();clearErr();var n=0,v={};
+  Object.keys(F).forEach(function(k){v[k]=$(F[k]).value.trim()});
+  if(!v.HN)n+=setErr("HN","กรอก HN");
+  else if(!editing&&pts.some(function(p){return p.HN==v.HN}))n+=setErr("HN","HN นี้มีอยู่แล้ว ใช้ HN อื่น");
+  if(!/^\d{13}$/.test(v.ID))n+=setErr("ID","กรอกเลขบัตรประชาชนให้ครบ 13 หลัก");
+  else if(pts.some(function(p){return p.ID==v.ID&&p.HN!=editing}))n+=setErr("ID","เลขบัตรนี้ลงทะเบียนแล้ว");
+  if(!v.NM)n+=setErr("NM","กรอกชื่อ - นามสกุล");
+  if(!v.BD)n+=setErr("BD","เลือกวันเดือนปีเกิด");
+  else if(new Date(v.BD)>new Date())n+=setErr("BD","วันเกิดต้องไม่เป็นวันในอนาคต");
+  if(!v.PH)n+=setErr("PH","กรอกเบอร์โทรศัพท์");
+  else if(!/^[0-9+\-\s]{9,20}$/.test(v.PH))n+=setErr("PH","เบอร์โทรใช้ได้เฉพาะตัวเลขและเครื่องหมาย -");
+  if(v.EM&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.EM))n+=setErr("EM","รูปแบบอีเมลไม่ถูกต้อง");
+  if(!v.AD)n+=setErr("AD","กรอกที่อยู่ติดต่อ");
+  if(n)return;
+  if(editing){pts=pts.map(function(p){return p.HN==editing?v:p});toast("บันทึกการแก้ไขแล้ว")}
+  else{pts.push(v);toast("บันทึกผู้ป่วยแล้ว: "+v.HN)}
+  render();tab("list");
+};
+$("#rows").onclick=function(ev){
+  var b=ev.target.closest("button");if(!b)return;
+  var hn=b.dataset.v||b.dataset.e||b.dataset.d,p=pts.filter(function(x){return x.HN==hn})[0];if(!p)return;
+  if(b.dataset.v)show(p);
+  if(b.dataset.e)openForm(p);
+  if(b.dataset.d&&visits.some(function(x){return x.HN==hn})){toast('ลบไม่ได้ ผู้ป่วยรายนี้มีประวัติเข้ารับบริการ');return}
+  if(b.dataset.d&&confirm("ลบข้อมูลผู้ป่วย "+p.NM+" ("+p.HN+") ใช่หรือไม่?")){pts=pts.filter(function(x){return x.HN!=hn});render();toast("ลบข้อมูลแล้ว")}
+};
+function show(p){
+  viewing=p;$("#dHN").textContent=p.HN;$("#dNM").textContent=p.NM;
+  var rows=[["เลขบัตรประชาชน",fmtId(p.ID)],["วันเกิด",thDate(p.BD)+" (อายุ "+age(p.BD)+" ปี)"],["เบอร์โทรศัพท์",p.PH],["อีเมล",p.EM||"-"],["ที่อยู่",p.AD]];
+  $("#dl").innerHTML=rows.map(function(r){return "<dt>"+r[0]+"</dt><dd>"+esc(r[1])+"</dd>"}).join("");
+  $("#dlg").showModal();
+}
+$("#dClose").onclick=function(){$("#dlg").close()};
+$("#dEdit").onclick=function(){$("#dlg").close();openForm(viewing)};
+$("#today").textContent=new Date().toLocaleDateString("th-TH",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+var tt;function toast(m){var t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(tt);tt=setTimeout(function(){t.classList.remove("on")},2400)}
+var visits=[];
+var deps=[['D001','อายุรกรรม'],['D002','ศัลยกรรม'],['D003','กุมารเวชกรรม'],['D004','สูตินรีเวชกรรม'],['D005','ออร์โธปิดิกส์'],['D006','ห้องฉุกเฉิน'],['D007','จักษุวิทยา'],['D008','โสต ศอ นาสิก']];
+function dn(id){var d=deps.filter(function(x){return x[0]==id})[0];return d?d[1]:id}
+function pt(hn){return pts.filter(function(p){return p.HN==hn})[0]}
+function nowLocal(){var d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)}
+function dAgo(n,hm){var d=new Date();d.setDate(d.getDate()-n);d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10)+'T'+hm}
+function genVN(s){var p='VN'+s.slice(2,4)+s.slice(5,7)+s.slice(8,10);var n=visits.filter(function(v){return v.VN.indexOf(p)==0}).length+1;return p+String(n).padStart(4,'0')}
+function fmtDT(v){return new Date(v).toLocaleString('th-TH',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'})+' น.'}
+[[2,'09:30','HN000002','D003'],[1,'10:05','HN000002','D004'],[1,'13:20','HN000003','D001'],[0,'08:15','HN000001','D002'],[0,'09:40','HN000003','D001']].forEach(function(r){var d=dAgo(r[0],r[1]);visits.push({VN:genVN(d),HN:r[2],DEP:r[3],VD:d})});
+$('#vdep').innerHTML=`<option value=''>ทุกแผนก</option>`+deps.map(d=>`<option value='${d[0]}'>${d[1]}</option>`).join('');
+function vRender(){
+ var q=$('#vq').value.trim().toLowerCase(),dp=$('#vdep').value;
+ var list=visits.filter(v=>{var p=pt(v.HN);return (!dp||v.DEP==dp)&&(!q||[v.VN,v.HN,p?p.NM:''].join(' ').toLowerCase().indexOf(q)>-1)}).sort((a,b)=>a.VD<b.VD?1:-1);
+ $('#vrows').innerHTML=list.length?list.map(v=>{var p=pt(v.HN);return `<tr><td class='mono'><b>${esc(v.VN)}</b></td><td><span class='hn'>${esc(v.HN)}</span></td><td>${p?esc(p.NM):'-'}</td><td>${esc(dn(v.DEP))}</td><td class='mono'>${fmtDT(v.VD)}</td><td><div class='acts'><button class='btn sm danger' data-x='${esc(v.VN)}'>ยกเลิก</button></div></td></tr>`}).join(''):`<tr><td colspan='6' class='empty'>${visits.length?'ไม่พบรายการที่ตรงกับคำค้นหา':'ยังไม่มีการเข้ารับบริการ กด ลงทะเบียนเข้ารับบริการ เพื่อเริ่มบันทึก'}</td></tr>`;
+ var t=nowLocal().slice(0,10),c={},best='-',m=0;
+ visits.forEach(v=>{c[v.DEP]=(c[v.DEP]||0)+1;if(c[v.DEP]>m){m=c[v.DEP];best=dn(v.DEP)}});
+ $('#vToday').textContent=visits.filter(v=>v.VD.slice(0,10)==t).length;$('#vTotal').textContent=visits.length;$('#vTop').textContent=best;
+}
+function vtab(n){['list','form'].forEach(k=>{$('#vp-'+k).hidden=k!=n;$('#vt-'+k).setAttribute('aria-selected',k==n)})}
+function vOpen(){
+ $('#VH').innerHTML=`<option value=''>เลือกผู้ป่วย</option>`+pts.map(p=>`<option value='${esc(p.HN)}'>${esc(p.HN)} - ${esc(p.NM)}</option>`).join('');
+ $('#VP').innerHTML=`<option value=''>เลือกแผนก</option>`+deps.map(d=>`<option value='${d[0]}'>${d[0]} - ${d[1]}</option>`).join('');
+ $('#VD').value=nowLocal();$('#VN').value=genVN($('#VD').value);$('#pv').className='pv';
+ document.querySelectorAll('#vf .err').forEach(e=>e.textContent='');document.querySelectorAll('#vf .bad').forEach(e=>e.classList.remove('bad'));
+ vtab('form');$('#VH').focus();
+}
+$('#vt-list').onclick=()=>vtab('list');$('#vt-form').onclick=vOpen;$('#goVisit').onclick=vOpen;$('#vcancel').onclick=()=>vtab('list');
+$('#VD').oninput=()=>{if($('#VD').value)$('#VN').value=genVN($('#VD').value)};
+$('#VH').onchange=()=>{var p=pt($('#VH').value),b=$('#pv');if(!p){b.className='pv';return}b.className='pv on';b.innerHTML=`<b>${esc(p.NM)}</b><br>อายุ ${age(p.BD)} ปี เบอร์โทร ${esc(p.PH)}`};
+$('#vf').onsubmit=ev=>{ev.preventDefault();var bad=0;
+ [['#VH','เลือกผู้ป่วย'],['#VP','เลือกแผนกที่เข้ารับบริการ'],['#VD','เลือกวันและเวลาที่เข้ารับบริการ']].forEach(r=>{var e=$(r[0]),ok=!!e.value;e.classList.toggle('bad',!ok);e.parentNode.querySelector('.err').textContent=ok?'':r[1];if(!ok)bad=1});
+ if(bad)return;
+ var vd=$('#VD').value,v={VN:genVN(vd),HN:$('#VH').value,DEP:$('#VP').value,VD:vd};visits.push(v);
+ toast('ลงทะเบียนเข้ารับบริการแล้ว: '+v.VN);vRender();vtab('list')};
+$('#vrows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;var vn=b.dataset.x;if(queues.some(function(c){return c.VN==vn})){toast('ยกเลิกไม่ได้ มีคิวตรวจของ VN นี้แล้ว');return}if(chg.some(function(c){return c.VN==vn})){toast('ยกเลิกไม่ได้ มีรายการค่าใช้จ่ายของ VN นี้แล้ว');return}if(hist.some(function(c){return c.VN==vn})){toast('ยกเลิกไม่ได้ มีประวัติการคัดกรองของ VN นี้แล้ว');return}if(bills.some(function(c){return c.VN==vn})){toast('ยกเลิกไม่ได้ มีใบแจ้งหนี้ของ VN นี้แล้ว');return}if(certs.some(function(c){return c.VN==vn})){toast('ยกเลิกไม่ได้ มีใบรับรองแพทย์ของ VN นี้แล้ว');return}if(confirm('ยกเลิกการเข้ารับบริการ '+vn+' ใช่หรือไม่?')){visits=visits.filter(v=>v.VN!=vn);vRender();toast('ยกเลิกการเข้ารับบริการแล้ว')}};
+$('#vq').oninput=vRender;$('#vdep').onchange=vRender;
+function view(n){$('#v-pt').hidden=n!='pt';$('#v-visit').hidden=n!='visit';$('#v-cert').hidden=n!='cert';$('#v-staff').hidden=n!='staff';$('#v-fin').hidden=n!='fin';$('#v-scr').hidden=n!='scr';$('#v-chg').hidden=n!='chg';$('#v-que').hidden=n!='que';[['pt','#n-pt'],['visit','#n-visit'],['cert','#n-cert'],['staff','#n-staff'],['fin','#n-fin'],['scr','#n-scr'],['chg','#n-chg'],['que','#n-que']].forEach(r=>{var b=$(r[1]);if(r[0]==n)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')})}
+$('#n-pt').onclick=()=>view('pt');$('#n-visit').onclick=()=>{view('visit');vRender()};
+var certs=[],curC=null;
+var docs=[['E0001','นพ.วิชัย สุขสวัสดิ์'],['E0002','พญ.สุนิสา รักษ์ดี'],['E0003','นพ.ธนากร ศรีสวัสดิ์'],['E0004','พญ.อรทัย พัฒนา']];
+function dnm(id){var e=(emps||[]).filter(function(x){return x.id==id})[0];return e?e.nm:id}
+function vget(n){return visits.filter(function(x){return x.VN==n})[0]}
+function ymd(d){d=new Date(d.getTime()-d.getTimezoneOffset()*60000);return d.toISOString().slice(0,10)}
+function endD(s,n){var d=new Date(s+'T00:00:00');d.setDate(d.getDate()+n-1);return ymd(d)}
+function fd(s,sh){return new Date(s+'T00:00:00').toLocaleDateString('th-TH',sh?{day:'numeric',month:'short',year:'2-digit'}:{day:'numeric',month:'long',year:'numeric'})}
+function genMC(s){var p='MC'+s.slice(2,4)+s.slice(5,7)+s.slice(8,10);var n=certs.filter(function(c){return c.CID.indexOf(p)==0}).length+1;return p+String(n).padStart(4,'0')}
+[[visits[2],'ไข้หวัดใหญ่ มีไข้สูง ไอ เจ็บคอ',3,'E0001','ดื่มน้ำมากๆ และพักผ่อนให้เพียงพอ'],[visits[1],'ท้องเสียเฉียบพลัน อ่อนเพลีย',2,'E0004',''],[visits[3],'กล้ามเนื้อหลังอักเสบ ปวดหลังเฉียบพลัน',5,'E0003','หลีกเลี่ยงการยกของหนัก']].forEach(function(r){var is=r[0].VD.slice(0,10);certs.push({CID:genMC(is),VN:r[0].VN,DOC:r[3],DX:r[1],RD:r[2],RS:is,RE:endD(is,r[2]),CM:r[4],IS:is})});
+function cRender(){
+ var q=$('#cq').value.trim().toLowerCase();
+ var list=certs.filter(c=>{var v=vget(c.VN),p=v&&pt(v.HN);return !q||[c.CID,c.VN,p?p.NM:'',dnm(c.DOC)].join(' ').toLowerCase().indexOf(q)>-1}).sort((a,b)=>a.CID<b.CID?1:-1);
+ $('#crows').innerHTML=list.length?list.map(c=>{var v=vget(c.VN),p=v&&pt(v.HN);return `<tr><td class='mono'><b>${esc(c.CID)}</b></td><td>${p?esc(p.NM):'-'}<br><span class='hn'>${esc(v?v.HN:'-')}</span></td><td>${esc(dnm(c.DOC))}</td><td>${c.RD} วัน<br><small style='color:var(--mute)'>${fd(c.RS,1)} - ${fd(c.RE,1)}</small></td><td>${fd(c.IS,1)}</td><td><div class='acts'><button class='btn sm' data-v='${esc(c.CID)}'>ดูใบรับรอง</button><button class='btn sm danger' data-x='${esc(c.CID)}'>ยกเลิก</button></div></td></tr>`}).join(''):`<tr><td colspan='6' class='empty'>${certs.length?'ไม่พบรายการที่ตรงกับคำค้นหา':'ยังไม่มีใบรับรองแพทย์ กด ออกใบรับรองแพทย์ เพื่อเริ่มบันทึก'}</td></tr>`;
+ var t=nowLocal().slice(0,10);
+ $('#cToday').textContent=certs.filter(c=>c.IS==t).length;$('#cTotal').textContent=certs.length;
+ $('#cAvg').textContent=certs.length?(Math.round(certs.reduce((a,c)=>a+c.RD,0)/certs.length*10)/10):0;
+}
+function ctab(n){['list','form'].forEach(k=>{$('#cp-'+k).hidden=k!=n;$('#ct-'+k).setAttribute('aria-selected',k==n)})}
+function cEnd(){var n=parseInt($('#CR').value),s=$('#CS').value;$('#CE').value=(n>0&&s)?endD(s,n):''}
+function cOpen(){
+ $('#VC').innerHTML=`<option value=''>เลือก VN ที่ต้องการออกใบรับรอง</option>`+visits.slice().sort((a,b)=>a.VD<b.VD?1:-1).map(v=>{var p=pt(v.HN);return `<option value='${esc(v.VN)}'>${esc(v.VN)} - ${p?esc(p.NM):esc(v.HN)} (${esc(dn(v.DEP))})</option>`}).join('');
+ $('#CD').innerHTML=`<option value=''>เลือกแพทย์</option>`+docs.map(d=>`<option value='${d[0]}'>${d[1]}</option>`).join('');
+ var t=nowLocal().slice(0,10);
+ $('#CI').value=t;$('#CS').value=t;$('#CR').value=1;$('#CDX').value='';$('#CCM').value='';$('#cpv').className='pv';
+ $('#CN').value=genMC(t);cEnd();
+ document.querySelectorAll('#cf .err').forEach(e=>e.textContent='');document.querySelectorAll('#cf .bad').forEach(e=>e.classList.remove('bad'));
+ ctab('form');$('#VC').focus();
+}
+$('#ct-list').onclick=()=>ctab('list');$('#ct-form').onclick=cOpen;$('#goCert').onclick=cOpen;$('#ccancel').onclick=()=>ctab('list');
+$('#CR').oninput=cEnd;$('#CS').oninput=cEnd;
+$('#CI').oninput=()=>{if($('#CI').value)$('#CN').value=genMC($('#CI').value)};
+$('#VC').onchange=()=>{var v=vget($('#VC').value),p=v&&pt(v.HN),b=$('#cpv');if(!v){b.className='pv';return}b.className='pv on';b.innerHTML=`<b>${p?esc(p.NM):'-'}</b> (${esc(v.HN)})<br>แผนก${esc(dn(v.DEP))} เข้ารับบริการ ${fmtDT(v.VD)}`};
+$('#cf').onsubmit=ev=>{ev.preventDefault();var bad=0;
+ function chk(sel,ok,m){var e=$(sel);e.classList.toggle('bad',!ok);e.parentNode.querySelector('.err').textContent=ok?'':m;if(!ok)bad=1}
+ var rd=parseInt($('#CR').value);
+ chk('#CI',!!$('#CI').value,'เลือกวันที่ออกเอกสาร');chk('#VC',!!$('#VC').value,'เลือกรหัสการเข้ารับบริการ');chk('#CD',!!$('#CD').value,'เลือกแพทย์ผู้ออกใบรับรอง');
+ chk('#CR',rd>=1&&rd<=365,'กรอกจำนวนวัน 1 - 365 วัน');chk('#CS',!!$('#CS').value,'เลือกวันที่เริ่มต้นหยุดพัก');chk('#CDX',!!$('#CDX').value.trim(),'กรอกสรุปผลการวินิจฉัย');
+ if(bad)return;
+ var is=$('#CI').value,s=$('#CS').value,c={CID:genMC(is),VN:$('#VC').value,DOC:$('#CD').value,DX:$('#CDX').value.trim(),RD:rd,RS:s,RE:endD(s,rd),CM:$('#CCM').value.trim(),IS:is};certs.push(c);
+ toast('บันทึกใบรับรองแพทย์แล้ว: '+c.CID);cRender();ctab('list')};
+function cShow(c){var v=vget(c.VN),p=v&&pt(v.HN);curC=c;
+ $('#cdBody').innerHTML=`<div class='doc'><h2>ใบรับรองแพทย์</h2><div class='c'>โรงพยาบาลมหาราชนครราชสีมา</div><div class='c'>เลขที่ ${esc(c.CID)} วันที่ออก ${fd(c.IS)}</div><p>ข้าพเจ้า <b>${esc(dnm(c.DOC))}</b> ได้ตรวจ <b>${p?esc(p.NM):'-'}</b> (รหัสประจำตัวผู้ป่วย ${esc(v?v.HN:'-')}) อายุ ${p?age(p.BD):'-'} ปี เมื่อ ${v?fmtDT(v.VD):'-'} (${esc(c.VN)}) ที่แผนก${v?esc(dn(v.DEP)):'-'}</p><p><b>ผลการวินิจฉัย:</b> ${esc(c.DX)}</p><p>สมควรหยุดพักรักษาตัวเป็นเวลา <b>${c.RD} วัน</b> ตั้งแต่วันที่ ${fd(c.RS)} ถึงวันที่ ${fd(c.RE)}</p>${c.CM?`<p><b>ความเห็นแพทย์เพิ่มเติม:</b> ${esc(c.CM)}</p>`:''}<div class='sig'>ลงชื่อ ..........................................<br>${esc(dnm(c.DOC))}<br>แพทย์ผู้ตรวจ</div></div>`;
+ $('#cdlg').showModal()}
+$('#crows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;
+ if(b.dataset.v){cShow(certs.filter(c=>c.CID==b.dataset.v)[0]);return}
+ var id=b.dataset.x;if(confirm('ยกเลิกใบรับรองแพทย์เลขที่ '+id+' ใช่หรือไม่?')){certs=certs.filter(c=>c.CID!=id);cRender();toast('ยกเลิกใบรับรองแพทย์แล้ว')}};
+$('#cdClose').onclick=()=>$('#cdlg').close();$('#cdPrint').onclick=()=>window.print();
+$('#cq').oninput=cRender;
+$('#n-cert').onclick=()=>{view('cert');cRender()};
+var roles=[{id:'R001',nm:'แพทย์'},{id:'R002',nm:'พยาบาล'},{id:'R003',nm:'เภสัชกร'},{id:'R004',nm:'เจ้าหน้าที่เวชระเบียน'}];
+var depts=[{id:'D001',nm:'อายุรกรรม',loc:'อาคารผู้ป่วยนอก ชั้น 2'},{id:'D002',nm:'ศัลยกรรม',loc:'อาคารผู้ป่วยนอก ชั้น 3'},{id:'D003',nm:'กุมารเวชกรรม',loc:'อาคารเด็ก ชั้น 1'},{id:'D004',nm:'สูตินรีเวชกรรม',loc:'อาคารแม่และเด็ก ชั้น 2'},{id:'D005',nm:'ออร์โธปิดิกส์',loc:'อาคารผู้ป่วยนอก ชั้น 4'},{id:'D006',nm:'ห้องฉุกเฉิน',loc:'อาคารอุบัติเหตุ ชั้น 1'},{id:'D007',nm:'จักษุวิทยา',loc:'อาคารผู้ป่วยนอก ชั้น 5'},{id:'D008',nm:'โสต ศอ นาสิก',loc:'อาคารผู้ป่วยนอก ชั้น 5'},{id:'D009',nm:'เวชระเบียน',loc:'อาคารผู้ป่วยนอก ชั้น 1'}];
+var emps=[{id:'E0001',edid:'ED0001',nm:'นพ.วิชัย สุขสวัสดิ์',ph:'081-111-2201',em:'wichai@hospital.example',role:'R001',dep:'D001'},{id:'E0002',edid:'ED0002',nm:'พญ.สุนิสา รักษ์ดี',ph:'081-111-2202',em:'sunisa@hospital.example',role:'R001',dep:'D004'},{id:'E0003',edid:'ED0003',nm:'นพ.ธนากร ศรีสวัสดิ์',ph:'081-111-2203',em:'thanakorn@hospital.example',role:'R001',dep:'D005'},{id:'E0004',edid:'ED0004',nm:'พญ.อรทัย พัฒนา',ph:'081-111-2204',em:'orathai@hospital.example',role:'R001',dep:'D003'},{id:'E0005',edid:'ED0005',nm:'นางสาวกาญจนา มีสุข',ph:'089-222-3305',em:'kanchana@hospital.example',role:'R002',dep:'D006'},{id:'E0006',edid:'ED0006',nm:'นางสาวรัตนา ใจงาม',ph:'089-222-3306',em:'rattana@hospital.example',role:'R004',dep:'D009'}];
+var accts=[{id:'ACC0001',emp:'E0006',user:'registrar01',hash:'seed'},{id:'ACC0002',emp:'E0001',user:'dr.wichai',hash:'seed'}];
+var sEdit=null,STABS=['list','form','role','dep','acc'];
+function nid(list,p,w){var m=0;list.forEach(x=>{var n=parseInt(String(x.id).replace(/\D/g,''))||0;if(n>m)m=n});return p+String(m+1).padStart(w,'0')}
+function roleNm(id){return (roles.filter(r=>r.id==id)[0]||{}).nm||'-'}
+function depNm(id){return (depts.filter(d=>d.id==id)[0]||{}).nm||'-'}
+function hasAcc(id){return accts.some(a=>a.emp==id)}
+function bad(sel,ok,m){var e=$(sel);e.classList.toggle('bad',!ok);var r=e.parentNode.querySelector('.err');if(r)r.textContent=ok?'':m;return ok?0:1}
+async function sha(s){try{var b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){var h=5381;for(var i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return 'h'+h.toString(16)}}
+function sync(){deps.length=0;depts.forEach(d=>deps.push([d.id,d.nm]));docs.length=0;emps.filter(e=>roleNm(e.role)=='แพทย์').forEach(e=>docs.push([e.id,e.nm]));
+ var cur=$('#vdep').value;$('#vdep').innerHTML=`<option value=''>ทุกแผนก</option>`+deps.map(d=>`<option value='${d[0]}'>${esc(d[1])}</option>`).join('');$('#vdep').value=cur}
+function sRender(){
+ var q=$('#sq').value.trim().toLowerCase(),rf=$('#srole').value;
+ $('#srole').innerHTML=`<option value=''>ทุกตำแหน่ง</option>`+roles.map(r=>`<option value='${r.id}'>${esc(r.nm)}</option>`).join('');$('#srole').value=rf;
+ var list=emps.filter(e=>(!rf||e.role==rf)&&(!q||[e.id,e.nm,e.ph,e.em].join(' ').toLowerCase().indexOf(q)>-1));
+ $('#srows').innerHTML=list.length?list.map(e=>`<tr><td class='mono'><b>${esc(e.id)}</b></td><td>${esc(e.nm)}<br><small style='color:var(--mute)'>${esc(e.em)}</small></td><td>${esc(roleNm(e.role))}</td><td>${esc(depNm(e.dep))}</td><td class='mono'>${esc(e.ph)}</td><td>${hasAcc(e.id)?`<span class='pill'>มีบัญชี</span>`:`<span class='pill off'>ไม่มี</span>`}</td><td><div class='acts'><button class='btn sm' data-e='${esc(e.id)}'>แก้ไข</button><button class='btn sm danger' data-d='${esc(e.id)}'>ลบ</button></div></td></tr>`).join(''):`<tr><td colspan='7' class='empty'>${emps.length?'ไม่พบบุคลากรที่ตรงกับคำค้นหา':'ยังไม่มีข้อมูลบุคลากร กด เพิ่มบุคลากร เพื่อเริ่มบันทึก'}</td></tr>`;
+ $('#rrows').innerHTML=roles.map(r=>`<tr><td class='mono'><b>${r.id}</b></td><td>${esc(r.nm)}</td><td>${emps.filter(e=>e.role==r.id).length} คน</td><td><div class='acts'><button class='btn sm danger' data-d='${r.id}'>ลบ</button></div></td></tr>`).join('');
+ $('#drows').innerHTML=depts.map(d=>`<tr><td class='mono'><b>${d.id}</b></td><td>${esc(d.nm)}</td><td>${esc(d.loc)}</td><td>${emps.filter(e=>e.dep==d.id).length} คน</td><td><div class='acts'><button class='btn sm danger' data-d='${d.id}'>ลบ</button></div></td></tr>`).join('');
+ $('#arows').innerHTML=accts.length?accts.map(a=>{var e=emps.filter(x=>x.id==a.emp)[0];return `<tr><td class='mono'><b>${a.id}</b></td><td>${e?esc(e.nm):'-'}<br><small style='color:var(--mute)'>${esc(a.emp)}</small></td><td class='mono'>${esc(a.user)}</td><td>••••••••</td><td><div class='acts'><button class='btn sm danger' data-d='${a.id}'>ลบบัญชี</button></div></td></tr>`}).join(''):`<tr><td colspan='5' class='empty'>ยังไม่มีบัญชีผู้ใช้งาน</td></tr>`;
+ $('#ACE').innerHTML=`<option value=''>เลือกบุคลากร</option>`+emps.filter(e=>!hasAcc(e.id)).map(e=>`<option value='${e.id}'>${esc(e.id)} - ${esc(e.nm)}</option>`).join('');
+ $('#sTot').textContent=emps.length;$('#sDoc').textContent=emps.filter(e=>roleNm(e.role)=='แพทย์').length;$('#sAcc').textContent=accts.length;
+}
+function stab(n){STABS.forEach(k=>{$('#stp-'+k).hidden=k!=n;$('#stt-'+k).setAttribute('aria-selected',k==n)})}
+STABS.forEach(k=>{$('#stt-'+k).onclick=()=>k=='form'?sOpen():stab(k)});
+function sOpen(e){
+ sEdit=e?e.id:null;
+ var v=e||{id:nid(emps,'E',4),nm:'',ph:'',em:'',role:'',dep:''};
+ $('#ERL').innerHTML=`<option value=''>เลือกตำแหน่ง</option>`+roles.map(r=>`<option value='${r.id}'>${esc(r.nm)}</option>`).join('');
+ $('#EDP').innerHTML=`<option value=''>เลือกแผนก</option>`+depts.map(d=>`<option value='${d.id}'>${esc(d.nm)}</option>`).join('');
+ $('#EID').value=v.id;$('#ENM').value=v.nm;$('#EPH').value=v.ph;$('#EEM').value=v.em;$('#ERL').value=v.role;$('#EDP').value=v.dep;
+ document.querySelectorAll('#sf .err').forEach(x=>x.textContent='');document.querySelectorAll('#sf .bad').forEach(x=>x.classList.remove('bad'));
+ $('#sfTitle').textContent=e?'แก้ไขข้อมูลบุคลากร '+e.id:'เพิ่มบุคลากรใหม่';$('#ssave').textContent=e?'บันทึกการแก้ไข':'บันทึกบุคลากร';
+ stab('form');$('#ENM').focus();
+}
+$('#goStaff').onclick=()=>sOpen();$('#scancel').onclick=()=>stab('list');$('#sq').oninput=sRender;$('#srole').onchange=sRender;
+$('#sf').onsubmit=ev=>{ev.preventDefault();var v={nm:$('#ENM').value.trim(),ph:$('#EPH').value.trim(),em:$('#EEM').value.trim(),role:$('#ERL').value,dep:$('#EDP').value};
+ var b=bad('#ENM',!!v.nm,'กรอกชื่อ - นามสกุล')+bad('#ERL',!!v.role,'เลือกตำแหน่ง')+bad('#EDP',!!v.dep,'เลือกแผนก')+bad('#EPH',/^[0-9+\-\s]{9,20}$/.test(v.ph),'กรอกเบอร์โทรให้ถูกต้อง (ตัวเลขและเครื่องหมาย -)')+bad('#EEM',/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.em),'รูปแบบอีเมลไม่ถูกต้อง');
+ if(b)return;
+ if(sEdit){emps=emps.map(e=>e.id==sEdit?Object.assign({},e,v):e);toast('บันทึกการแก้ไขแล้ว')}else{var id=nid(emps,'E',4);emps.push(Object.assign({id:id,edid:'ED'+id.slice(1)},v));toast('บันทึกบุคลากรแล้ว: '+id)}
+ sync();sRender();stab('list')};
+$('#srows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;
+ if(b.dataset.e){sOpen(emps.filter(e=>e.id==b.dataset.e)[0]);return}
+ var id=b.dataset.d,e=emps.filter(x=>x.id==id)[0];
+ if(chg.some(c=>c.DOC==id)){toast('ลบไม่ได้ บุคลากรรายนี้เป็นแพทย์ผู้บันทึกค่าใช้จ่าย');return}
+ if(hist.some(h=>h.EMP==id)){toast('ลบไม่ได้ บุคลากรรายนี้เป็นผู้ซักประวัติ');return}
+ if(pays.some(p=>p.CASH==id)){toast('ลบไม่ได้ บุคลากรรายนี้เป็นผู้รับชำระเงิน');return}
+ if(certs.some(c=>c.DOC==id)){toast('ลบไม่ได้ บุคลากรรายนี้เป็นแพทย์ผู้ออกใบรับรอง');return}
+ if(hasAcc(id)){toast('ลบไม่ได้ ต้องลบบัญชีผู้ใช้งานก่อน');return}
+ if(confirm('ลบข้อมูลบุคลากร '+e.nm+' ('+id+') ใช่หรือไม่?')){emps=emps.filter(x=>x.id!=id);sync();sRender();toast('ลบข้อมูลแล้ว')}};
+$('#rf').onsubmit=ev=>{ev.preventDefault();var n=$('#RNM').value.trim();
+ if(bad('#RNM',!!n&&!roles.some(r=>r.nm==n),n?'มีตำแหน่งนี้แล้ว':'กรอกชื่อตำแหน่ง'))return;
+ roles.push({id:nid(roles,'R',3),nm:n});$('#RNM').value='';sync();sRender();toast('เพิ่มตำแหน่งแล้ว')};
+$('#rrows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;var id=b.dataset.d;
+ if(emps.some(e=>e.role==id)){toast('ลบไม่ได้ มีบุคลากรในตำแหน่งนี้');return}
+ if(confirm('ลบตำแหน่ง '+roleNm(id)+' ใช่หรือไม่?')){roles=roles.filter(r=>r.id!=id);sync();sRender();toast('ลบตำแหน่งแล้ว')}};
+$('#df').onsubmit=ev=>{ev.preventDefault();var n=$('#DNM').value.trim(),l=$('#DLC').value.trim();
+ var b=bad('#DNM',!!n&&!depts.some(d=>d.nm==n),n?'มีแผนกนี้แล้ว':'กรอกชื่อแผนก')+bad('#DLC',!!l,'กรอกสถานที่ตั้ง');
+ if(b)return;
+ depts.push({id:nid(depts,'D',3),nm:n,loc:l});$('#DNM').value='';$('#DLC').value='';sync();sRender();toast('เพิ่มแผนกแล้ว')};
+$('#drows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;var id=b.dataset.d;
+ if(emps.some(e=>e.dep==id)||visits.some(v=>v.DEP==id)){toast('ลบไม่ได้ แผนกนี้มีบุคลากรหรือประวัติเข้ารับบริการอยู่');return}
+ if(confirm('ลบแผนก '+depNm(id)+' ใช่หรือไม่?')){depts=depts.filter(d=>d.id!=id);sync();sRender();toast('ลบแผนกแล้ว')}};
+$('#af').onsubmit=async ev=>{ev.preventDefault();var un=$('#AUN').value.trim(),pw=$('#APW').value;
+ var b=bad('#ACE',!!$('#ACE').value,'เลือกบุคลากร')+bad('#AUN',/^[A-Za-z0-9._-]{4,50}$/.test(un),'ชื่อผู้ใช้ 4 ถึง 50 ตัว ใช้ A-Z a-z 0-9 . _ - เท่านั้น')+bad('#APW',pw.length>=8,'รหัสผ่านอย่างน้อย 8 ตัวอักษร')+bad('#APW2',pw==$('#APW2').value,'รหัสผ่านไม่ตรงกัน');
+ if(!b&&accts.some(a=>a.user.toLowerCase()==un.toLowerCase()))b=bad('#AUN',false,'ชื่อผู้ใช้นี้ถูกใช้แล้ว');
+ if(b)return;
+ var h=await sha(pw);accts.push({id:nid(accts,'ACC',4),emp:$('#ACE').value,user:un,hash:h});
+ $('#af').reset();sRender();toast('สร้างบัญชีผู้ใช้งานแล้ว')};
+$('#arows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;var id=b.dataset.d;
+ if(confirm('ลบบัญชีผู้ใช้งาน '+id+' ใช่หรือไม่?')){accts=accts.filter(a=>a.id!=id);sRender();toast('ลบบัญชีแล้ว')}};
+$('#n-staff').onclick=()=>{view('staff');sRender()};
+roles.push({id:'R005',nm:'เจ้าหน้าที่การเงิน'});depts.push({id:'D010',nm:'การเงิน',loc:'อาคารผู้ป่วยนอก ชั้น 1'});emps.push({id:'E0007',edid:'ED0007',nm:'นางสาวปิยะดา การเงินดี',ph:'089-222-3307',em:'piyada@hospital.example',role:'R005',dep:'D010'});
+var bills=[],pays=[],FTABS=['bill','billf','pay','payf'];
+var METH={'Cash':'เงินสด','Scan QR':'สแกน QR','Card':'บัตรเครดิต/เดบิต'};
+function fm(n){return Number(n).toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2})}
+function r2(n){return Math.round(n*100)/100}
+function seqId(list,key,p,s){var pre=p+s.slice(2,4)+s.slice(5,7)+s.slice(8,10);return pre+String(list.filter(x=>x[key].indexOf(pre)==0).length+1).padStart(4,'0')}
+function genBL(s){return seqId(bills,'BID','BL',s)}
+function genRC(s){return seqId(pays,'PID','RC',s)}
+function bInfo(b){var v=vget(b.VN),p=v&&pt(v.HN);return {v:v,p:p}}
+function bget(id){return bills.filter(x=>x.BID==id)[0]}
+function stPill(s){return s=='Paid'?`<span class='pill'>ชำระแล้ว</span>`:`<span class='pill warn'>รอชำระ</span>`}
+[[visits[0],1850,1500,0,'Paid'],[visits[1],3200,2500,200,'Paid'],[visits[2],1200,800,0,'Pending'],[visits[3],5400,4000,400,'Pending']].forEach(r=>{var d=r[0].VD.slice(0,10);bills.push({BID:genBL(d),VN:r[0].VN,TOT:r[1],COV:r[2],DIS:r[3],NET:r2(r[1]-r[2]-r[3]),ST:r[4]})});
+[[0,'Cash',400],[1,'Scan QR',500]].forEach(r=>{var b=bills[r[0]],dt=vget(b.VN).VD.slice(0,10)+'T16:30',id=genRC(dt);pays.push({PID:id,BID:b.BID,CASH:'E0007',DT:dt,METH:r[1],PAID:r[2],CHG:r2(r[2]-b.NET),PATH:'/receipts/'+id+'.pdf'})});
+function fRender(){
+ var q=$('#bq').value.trim().toLowerCase(),sf=$('#bst').value,q2=$('#pq').value.trim().toLowerCase();
+ var bl=bills.filter(b=>{var i=bInfo(b);return (!sf||b.ST==sf)&&(!q||[b.BID,b.VN,i.p?i.p.NM:''].join(' ').toLowerCase().indexOf(q)>-1)}).sort((a,b)=>a.BID<b.BID?1:-1);
+ $('#brows').innerHTML=bl.length?bl.map(b=>{var i=bInfo(b);return `<tr><td class='mono'><b>${esc(b.BID)}</b></td><td>${i.p?esc(i.p.NM):'-'}<br><small style='color:var(--mute)'>${esc(b.VN)}</small></td><td class='mono'>${fm(b.TOT)}</td><td class='mono'>${fm(b.COV)}</td><td class='mono'>${fm(b.DIS)}</td><td class='mono'><b>${fm(b.NET)}</b></td><td>${stPill(b.ST)}</td><td><div class='acts'>${b.ST=='Pending'?`<button class='btn sm pri' data-p='${esc(b.BID)}'>รับชำระ</button><button class='btn sm danger' data-x='${esc(b.BID)}'>ยกเลิก</button>`:`<button class='btn sm' data-r='${esc(b.BID)}'>ใบเสร็จ</button>`}</div></td></tr>`}).join(''):`<tr><td colspan='8' class='empty'>${bills.length?'ไม่พบใบแจ้งหนี้ที่ตรงกับเงื่อนไข':'ยังไม่มีใบแจ้งหนี้ กด สร้างใบแจ้งหนี้ เพื่อเริ่มบันทึก'}</td></tr>`;
+ var pl=pays.filter(p=>{var i=bInfo(bget(p.BID));return !q2||[p.PID,p.BID,i.p?i.p.NM:''].join(' ').toLowerCase().indexOf(q2)>-1}).sort((a,b)=>a.DT<b.DT?1:-1);
+ $('#prows').innerHTML=pl.length?pl.map(p=>{var i=bInfo(bget(p.BID));return `<tr><td class='mono'><b>${esc(p.PID)}</b></td><td class='mono'>${esc(p.BID)}</td><td>${i.p?esc(i.p.NM):'-'}</td><td class='mono'>${fmtDT(p.DT)}</td><td>${METH[p.METH]||esc(p.METH)}</td><td class='mono'>${fm(p.PAID)}</td><td class='mono'>${fm(p.CHG)}</td><td>${esc(dnm(p.CASH))}</td><td><div class='acts'><button class='btn sm' data-r='${esc(p.PID)}'>ใบเสร็จ</button></div></td></tr>`}).join(''):`<tr><td colspan='9' class='empty'>${pays.length?'ไม่พบรายการที่ตรงกับคำค้นหา':'ยังไม่มีการรับชำระเงิน'}</td></tr>`;
+ var pend=bills.filter(b=>b.ST=='Pending'),t=nowLocal().slice(0,10);
+ $('#fPend').textContent=pend.length;$('#fDue').textContent=fm(pend.reduce((a,b)=>a+b.NET,0));
+ $('#fToday').textContent=fm(pays.filter(p=>p.DT.slice(0,10)==t).reduce((a,p)=>a+p.PAID-p.CHG,0));
+}
+function ftab(n){FTABS.forEach(k=>{$('#fp-'+k).hidden=k!=n;$('#ft-'+k).setAttribute('aria-selected',k==n)})}
+function fClear(f){document.querySelectorAll(f+' .err').forEach(e=>e.textContent='');document.querySelectorAll(f+' .bad').forEach(e=>e.classList.remove('bad'))}
+function fNet(){var t=parseFloat($('#FTOT').value)||0,c=parseFloat($('#FCOV').value)||0,d=parseFloat($('#FDIS').value)||0;$('#FNET').value=r2(Math.max(0,t-c-d)).toFixed(2)}
+function bOpen(){
+ var free=visits.filter(v=>!bills.some(b=>b.VN==v.VN)).sort((a,b)=>a.VD<b.VD?1:-1);
+ $('#FV').innerHTML=`<option value=''>${free.length?'เลือก VN ที่ต้องการออกใบแจ้งหนี้':'ไม่มี VN ที่ยังไม่ออกใบแจ้งหนี้'}</option>`+free.map(v=>{var p=pt(v.HN);return `<option value='${esc(v.VN)}'>${esc(v.VN)} - ${p?esc(p.NM):esc(v.HN)} (${esc(dn(v.DEP))})</option>`}).join('');
+ $('#FBN').value=genBL(nowLocal().slice(0,10));$('#FTOT').value='';$('#FCOV').value='0';$('#FDIS').value='0';$('#fpv').className='pv';fNet();fClear('#bf');ftab('billf');$('#FV').focus();
+}
+$('#FV').onchange=()=>{var v=vget($('#FV').value),p=v&&pt(v.HN),b=$('#fpv');if(!v){b.className='pv';return}b.className='pv on';b.innerHTML=`<b>${p?esc(p.NM):'-'}</b> (${esc(v.HN)})<br>แผนก${esc(dn(v.DEP))} เข้ารับบริการ ${fmtDT(v.VD)}`};
+['#FTOT','#FCOV','#FDIS'].forEach(s=>{$(s).oninput=fNet});
+$('#bf').onsubmit=ev=>{ev.preventDefault();
+ var v=vget($('#FV').value),t=parseFloat($('#FTOT').value),c=parseFloat($('#FCOV').value)||0,d=parseFloat($('#FDIS').value)||0;
+ var b=bad('#FV',!!v,'เลือก VN')+bad('#FTOT',t>0&&t<=99999999.99,'กรอกยอดรวมค่าใช้จ่ายมากกว่า 0')+bad('#FCOV',c>=0&&c<=99999999.99,'ยอดเบิกต้องไม่ติดลบ')+bad('#FDIS',d>=0&&d<=99999999.99,'ส่วนลดต้องไม่ติดลบ');
+ if(!b)b=bad('#FNET',r2(c+d)<t,'ยอดเบิกและส่วนลดรวมกันต้องน้อยกว่ายอดรวมค่าใช้จ่าย');
+ if(b)return;
+ var bl={BID:genBL(nowLocal().slice(0,10)),VN:v.VN,TOT:r2(t),COV:r2(c),DIS:r2(d),NET:r2(t-c-d),ST:'Pending'};bills.push(bl);
+ toast('บันทึกใบแจ้งหนี้แล้ว: '+bl.BID);fRender();ftab('bill')};
+function pNet(){var b=bget($('#FB').value);return b?b.NET:0}
+function pCalc(){var n=pNet(),p=parseFloat($('#FPD').value);$('#FCG').value=(n&&!isNaN(p)&&p>=n)?r2(p-n).toFixed(2):''}
+function pPrev(){var b=bget($('#FB').value),pv=$('#fpv2');if(!b){pv.className='pv';return}var i=bInfo(b);pv.className='pv on';pv.innerHTML=`<b>${i.p?esc(i.p.NM):'-'}</b> (${esc(i.v?i.v.HN:'-')}) VN ${esc(b.VN)}<br>ยอดสุทธิที่ต้องชำระ <b>${fm(b.NET)}</b> บาท`}
+function pOpen(bid){
+ var pend=bills.filter(b=>b.ST=='Pending');
+ $('#FB').innerHTML=`<option value=''>${pend.length?'เลือกใบแจ้งหนี้':'ไม่มีใบแจ้งหนี้ที่รอชำระ'}</option>`+pend.map(b=>{var i=bInfo(b);return `<option value='${esc(b.BID)}'>${esc(b.BID)} - ${i.p?esc(i.p.NM):'-'} (สุทธิ ${fm(b.NET)} บาท)</option>`}).join('');
+ var cs=emps.filter(e=>roleNm(e.role)=='เจ้าหน้าที่การเงิน');
+ $('#FCS').innerHTML=`<option value=''>เลือกเจ้าหน้าที่การเงิน</option>`+cs.map(e=>`<option value='${e.id}'>${esc(e.id)} - ${esc(e.nm)}</option>`).join('');
+ $('#FDT').value=nowLocal();$('#FRN').value=genRC($('#FDT').value);$('#FMD').value='Cash';$('#FPD').readOnly=false;
+ $('#FB').value=bid||'';$('#FPD').value='';pPrev();if(bid)$('#FPD').value=pNet().toFixed(2);pCalc();fClear('#pf');ftab('payf');
+}
+$('#FB').onchange=()=>{pPrev();$('#FPD').value=pNet()?pNet().toFixed(2):'';pCalc()};
+$('#FMD').onchange=()=>{var cash=$('#FMD').value=='Cash';$('#FPD').readOnly=!cash;if(!cash)$('#FPD').value=pNet()?pNet().toFixed(2):'';pCalc()};
+$('#FPD').oninput=pCalc;
+$('#FDT').oninput=()=>{if($('#FDT').value)$('#FRN').value=genRC($('#FDT').value)};
+$('#pf').onsubmit=ev=>{ev.preventDefault();
+ var b=bget($('#FB').value),paid=parseFloat($('#FPD').value),cash=$('#FMD').value=='Cash';
+ var ok=!!b&&!isNaN(paid)&&paid<=99999999.99&&(cash?paid>=b.NET:Math.abs(paid-b.NET)<0.005);
+ var e=bad('#FB',!!b,'เลือกใบแจ้งหนี้ที่รอชำระ')+bad('#FMD',!!$('#FMD').value,'เลือกวิธีชำระเงิน')+bad('#FCS',!!$('#FCS').value,'เลือกเจ้าหน้าที่การเงิน')+bad('#FDT',!!$('#FDT').value,'เลือกวันและเวลาที่ชำระเงิน')+bad('#FPD',ok,cash?'ยอดที่รับต้องไม่น้อยกว่ายอดสุทธิที่ต้องชำระ':'ชำระด้วย QR หรือบัตร ยอดต้องเท่ากับยอดสุทธิ');
+ if(e)return;
+ var dt=$('#FDT').value,id=genRC(dt),py={PID:id,BID:b.BID,CASH:$('#FCS').value,DT:dt,METH:$('#FMD').value,PAID:r2(paid),CHG:r2(paid-b.NET),PATH:'/receipts/'+id+'.pdf'};
+ pays.push(py);b.ST='Paid';toast('บันทึกการรับชำระเงินแล้ว: '+id);fRender();ftab('pay');fShow(py)};
+function fShow(py){var b=bget(py.BID),i=bInfo(b);
+ $('#fdBody').innerHTML=`<div class='doc'><h2>ใบเสร็จรับเงิน</h2><div class='c'>โรงพยาบาลมหาราชนครราชสีมา</div><div class='c'>เลขที่ ${esc(py.PID)} วันที่ ${fmtDT(py.DT)}</div><p>ได้รับเงินจาก <b>${i.p?esc(i.p.NM):'-'}</b> (รหัสประจำตัวผู้ป่วย ${esc(i.v?i.v.HN:'-')})<br>ใบแจ้งหนี้ ${esc(b.BID)} การเข้ารับบริการ ${esc(b.VN)}</p><div class='rr'><span>ยอดรวมค่าใช้จ่ายทั้งหมด</span><span class='mono'>${fm(b.TOT)}</span></div><div class='rr'><span>เบิกได้ตามสิทธิการรักษา</span><span class='mono'>${fm(b.COV)}</span></div><div class='rr'><span>ส่วนลดพิเศษ</span><span class='mono'>${fm(b.DIS)}</span></div><div class='rr tot'><span>ยอดสุทธิที่ต้องชำระ</span><span class='mono'>${fm(b.NET)}</span></div><div class='rr'><span>วิธีชำระเงิน</span><span>${METH[py.METH]||esc(py.METH)}</span></div><div class='rr'><span>รับเงิน</span><span class='mono'>${fm(py.PAID)}</span></div><div class='rr'><span>เงินทอน</span><span class='mono'>${fm(py.CHG)}</span></div><div class='sig'>ผู้รับเงิน ${esc(dnm(py.CASH))}<br>เจ้าหน้าที่การเงิน</div><div class='tiny'>ไฟล์ใบเสร็จอิเล็กทรอนิกส์ ${esc(py.PATH)}</div></div>`;
+ $('#fdlg').showModal()}
+$('#ft-bill').onclick=()=>ftab('bill');$('#ft-billf').onclick=()=>bOpen();$('#ft-pay').onclick=()=>ftab('pay');$('#ft-payf').onclick=()=>pOpen();$('#goBill').onclick=()=>bOpen();$('#bcancel').onclick=()=>ftab('bill');$('#pcancel').onclick=()=>ftab('bill');
+$('#bq').oninput=fRender;$('#bst').onchange=fRender;$('#pq').oninput=fRender;
+$('#brows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;
+ if(b.dataset.p){pOpen(b.dataset.p);return}
+ if(b.dataset.r){fShow(pays.filter(p=>p.BID==b.dataset.r)[0]);return}
+ var id=b.dataset.x;if(confirm('ยกเลิกใบแจ้งหนี้ '+id+' ใช่หรือไม่?')){bills=bills.filter(x=>x.BID!=id);fRender();toast('ยกเลิกใบแจ้งหนี้แล้ว')}};
+$('#prows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;fShow(pays.filter(p=>p.PID==b.dataset.r)[0])};
+$('#fdClose').onclick=()=>$('#fdlg').close();$('#fdPrint').onclick=()=>window.print();
+$('#n-fin').onclick=()=>{view('fin');fRender()};
+var hist=[],hEdit=null,HTABS=['list','form'];
+function genPH(s){return seqId(hist,'HID','PH',s)}
+function isAl(t){return !/^(ไม่มี|ปฏิเสธ|ไม่แพ้)/.test((t||'').trim())}
+function vFlags(h){var f={},a=(h.BP||'').split('/'),s=+a[0],d=+a[1];if(s>=140||d>=90||s<90||d<60)f.bp=1;if(h.TP>=37.5||h.TP<35.5)f.tp=1;if(h.PR<60||h.PR>100)f.pr=1;if(h.RR<12||h.RR>20)f.rr=1;return f}
+function bmi(w,h){return r2(w/Math.pow(h/100,2))}
+function bmiTxt(b){return b<18.5?'ต่ำกว่าเกณฑ์':b<23?'ปกติ':b<25?'น้ำหนักเกิน':'อ้วน'}
+function anyF(h){return Object.keys(vFlags(h)).length>0}
+[[visits[0],'ปวดท้องด้านขวาล่าง 1 วัน','ปวดท้องน้อยด้านขวาตั้งแต่เมื่อวาน คลื่นไส้ ไม่มีอาเจียน','ไม่มีโรคประจำตัว','ไม่มี','ไม่มี','118/76',36.8,78,18,52.5,160],[visits[1],'ตรวจครรภ์ตามนัด','มาตรวจครรภ์ตามนัด ไม่มีอาการผิดปกติ','ไม่มีโรคประจำตัว','ไม่มี','วิตามินรวมสำหรับหญิงตั้งครรภ์','110/70',36.6,82,18,58,158],[visits[2],'ไข้ ไอ เจ็บคอ 3 วัน','มีไข้สูง ไอมีเสมหะ เจ็บคอ รับประทานยาลดไข้แล้วไม่ดีขึ้น','ความดันโลหิตสูง','แพ้ยาเพนิซิลลิน (ผื่นขึ้น)','Amlodipine 5 mg วันละ 1 ครั้ง','142/92',38.4,96,22,68,165],[visits[3],'ปวดหลังเฉียบพลัน','ปวดหลังส่วนล่างหลังยกของหนัก ไม่มีอาการชา','ไม่มีโรคประจำตัว','ไม่มี','พาราเซตามอลเมื่อมีอาการปวด','125/80',36.9,74,18,74,172]].forEach(r=>{var dt=r[0].VD;hist.push({HID:genPH(dt),VN:r[0].VN,EMP:'E0005',CC:r[1],PI:r[2],PM:r[3],AL:r[4],CM:r[5],BP:r[6],TP:r[7],PR:r[8],RR:r[9],WT:r[10],HT:r[11],DT:dt})});
+function hRender(){
+ var q=$('#hq').value.trim().toLowerCase(),fl=$('#hfl').value;
+ var list=hist.filter(h=>{var v=vget(h.VN),p=v&&pt(v.HN);return (!fl||(fl=='al'?isAl(h.AL):anyF(h)))&&(!q||[h.HID,h.VN,p?p.NM:'',h.CC].join(' ').toLowerCase().indexOf(q)>-1)}).sort((a,b)=>a.DT<b.DT?1:-1);
+ $('#hrows').innerHTML=list.length?list.map(h=>{var v=vget(h.VN),p=v&&pt(v.HN),f=vFlags(h);return `<tr><td class='mono'><b>${esc(h.HID)}</b></td><td>${p?esc(p.NM):'-'}<br><small style='color:var(--mute)'>${esc(h.VN)}</small></td><td style='max-width:200px'>${esc(h.CC)}</td><td class='mono'><span class='${f.bp?'wv':''}'>BP ${esc(h.BP)}</span> <span class='${f.tp?'wv':''}'>T ${h.TP.toFixed(1)}</span><br><span class='${f.pr?'wv':''}'>P ${h.PR}</span> <span class='${f.rr?'wv':''}'>RR ${h.RR}</span></td><td>${isAl(h.AL)?`<span class='pill warn'>${esc(h.AL.length>26?h.AL.slice(0,26)+'...':h.AL)}</span>`:`<span class='pill off'>ไม่มี</span>`}</td><td class='mono'>${fmtDT(h.DT)}</td><td><div class='acts'><button class='btn sm' data-v='${esc(h.HID)}'>ดู</button><button class='btn sm' data-e='${esc(h.HID)}'>แก้ไข</button></div></td></tr>`}).join(''):`<tr><td colspan='7' class='empty'>${hist.length?'ไม่พบรายการที่ตรงกับเงื่อนไข':'ยังไม่มีประวัติการคัดกรอง กด บันทึกการคัดกรอง เพื่อเริ่ม'}</td></tr>`;
+ var t=nowLocal().slice(0,10);
+ $('#hToday').textContent=hist.filter(h=>h.DT.slice(0,10)==t).length;$('#hAl').textContent=hist.filter(h=>isAl(h.AL)).length;$('#hAb').textContent=hist.filter(anyF).length;
+}
+function htab(n){HTABS.forEach(k=>{$('#hp-'+k).hidden=k!=n;$('#ht-'+k).setAttribute('aria-selected',k==n)})}
+function hBmi(){var w=parseFloat($('#HWT').value),h=parseFloat($('#HHT').value);if(w>0&&h>=20){var b=bmi(w,h);$('#HBMI').value=b.toFixed(1)+' ('+bmiTxt(b)+')'}else $('#HBMI').value=''}
+function hOpen(h){
+ hEdit=h?h.HID:null;
+ var free=visits.filter(v=>h?v.VN==h.VN:!hist.some(x=>x.VN==v.VN)).sort((a,b)=>a.VD<b.VD?1:-1);
+ $('#HVN').innerHTML=`<option value=''>${free.length?'เลือก VN ที่ต้องการซักประวัติ':'ไม่มี VN ที่ยังไม่ได้ซักประวัติ'}</option>`+free.map(v=>{var p=pt(v.HN);return `<option value='${esc(v.VN)}'>${esc(v.VN)} - ${p?esc(p.NM):esc(v.HN)} (${esc(dn(v.DEP))})</option>`}).join('');
+ var ns=emps.filter(e=>roleNm(e.role)=='พยาบาล');
+ $('#HEM').innerHTML=`<option value=''>เลือกพยาบาลผู้ซักประวัติ</option>`+ns.map(e=>`<option value='${e.id}'>${esc(e.id)} - ${esc(e.nm)}</option>`).join('');
+ var v=h||{DT:nowLocal(),VN:'',EMP:'',CC:'',PI:'',PM:'',AL:'',CM:'',BP:'',TP:'',PR:'',RR:'',WT:'',HT:''};
+ $('#HDT').value=v.DT;$('#HID').value=h?h.HID:genPH(v.DT);$('#HVN').value=v.VN;$('#HVN').disabled=!!h;$('#HEM').value=v.EMP;
+ $('#HCC').value=v.CC;$('#HPI').value=v.PI;$('#HPM').value=v.PM;$('#HAL').value=v.AL;$('#HCM').value=v.CM;$('#HBP').value=v.BP;$('#HTP').value=v.TP;$('#HPR').value=v.PR;$('#HRR').value=v.RR;$('#HWT').value=v.WT;$('#HHT').value=v.HT;
+ $('#hpv').className='pv';if(h)$('#HVN').onchange();hBmi();fClear('#hf');
+ $('#hfTitle').textContent=h?'แก้ไขประวัติการคัดกรอง '+h.HID:'บันทึกการคัดกรอง';$('#hsave').textContent=h?'บันทึกการแก้ไข':'บันทึกการคัดกรอง';
+ htab('form');if(!h)$('#HVN').focus();
+}
+$('#HVN').onchange=()=>{var v=vget($('#HVN').value),p=v&&pt(v.HN),b=$('#hpv');if(!v){b.className='pv';return}b.className='pv on';b.innerHTML=`<b>${p?esc(p.NM):'-'}</b> (${esc(v.HN)}) อายุ ${p?age(p.BD):'-'} ปี<br>แผนก${esc(dn(v.DEP))} เข้ารับบริการ ${fmtDT(v.VD)}`};
+$('#HWT').oninput=hBmi;$('#HHT').oninput=hBmi;$('#HNOA').onclick=()=>{$('#HAL').value='ไม่มี'};
+$('#HDT').oninput=()=>{if($('#HDT').value&&!hEdit)$('#HID').value=genPH($('#HDT').value)};
+$('#hf').onsubmit=ev=>{ev.preventDefault();
+ var v={VN:$('#HVN').value,EMP:$('#HEM').value,DT:$('#HDT').value,CC:$('#HCC').value.trim(),PI:$('#HPI').value.trim(),PM:$('#HPM').value.trim(),AL:$('#HAL').value.trim(),CM:$('#HCM').value.trim(),BP:$('#HBP').value.trim(),TP:parseFloat($('#HTP').value),PR:parseInt($('#HPR').value),RR:parseInt($('#HRR').value),WT:parseFloat($('#HWT').value),HT:parseFloat($('#HHT').value)};
+ var a=v.BP.split('/'),bpok=a.length==2&&/^[0-9]{2,3}$/.test(a[0])&&/^[0-9]{2,3}$/.test(a[1])&&+a[0]>+a[1]&&+a[0]<=300&&+a[1]>=30;
+ var e=bad('#HVN',!!v.VN,'เลือก VN')+bad('#HEM',!!v.EMP,'เลือกพยาบาลผู้ซักประวัติ')+bad('#HDT',!!v.DT,'เลือกวันและเวลา')+bad('#HCC',!!v.CC,'กรอกอาการสำคัญ')+bad('#HAL',!!v.AL,'กรอกประวัติการแพ้ ถ้าไม่มีให้กรอก ไม่มี')+bad('#HBP',bpok,'กรอกเป็นรูปแบบ 120/80')+bad('#HTP',v.TP>=30&&v.TP<=45,'อุณหภูมิ 30 ถึง 45 องศาเซลเซียส')+bad('#HPR',v.PR>=20&&v.PR<=250,'ชีพจร 20 ถึง 250 ครั้งต่อนาที')+bad('#HRR',v.RR>=4&&v.RR<=80,'อัตราการหายใจ 4 ถึง 80 ครั้งต่อนาที')+bad('#HWT',v.WT>=0.5&&v.WT<=500,'น้ำหนัก 0.5 ถึง 500 กิโลกรัม')+bad('#HHT',v.HT>=20&&v.HT<=250,'ส่วนสูง 20 ถึง 250 ซม.');
+ if(e)return;
+ v.TP=r2(v.TP);v.WT=r2(v.WT);v.HT=r2(v.HT);
+ if(hEdit){hist=hist.map(h=>h.HID==hEdit?Object.assign({},h,v):h);toast('บันทึกการแก้ไขแล้ว')}else{v.HID=genPH(v.DT);hist.push(v);toast('บันทึกการคัดกรองแล้ว: '+v.HID)}
+ hRender();htab('list')};
+function hShow(h){var v=vget(h.VN),p=v&&pt(v.HN),f=vFlags(h),b=bmi(h.WT,h.HT);
+ var ch=[['ความดันโลหิต',h.BP,'mmHg',f.bp],['อุณหภูมิ',h.TP.toFixed(1),'°C',f.tp],['ชีพจร',h.PR,'ครั้ง/นาที',f.pr],['การหายใจ',h.RR,'ครั้ง/นาที',f.rr],['น้ำหนัก / ส่วนสูง',h.WT+' / '+h.HT,'กก. / ซม.',0],['BMI',b.toFixed(1),bmiTxt(b),0]];
+ var tx=(l,t)=>`<p><b>${l}:</b> ${t?esc(t):'-'}</p>`;
+ $('#hdBody').innerHTML=`<div class='doc'><h2>ประวัติการคัดกรอง</h2><div class='c'>โรงพยาบาลมหาราชนครราชสีมา</div><div class='c'>เลขที่ ${esc(h.HID)} วันที่ ${fmtDT(h.DT)}</div><p>ผู้ป่วย <b>${p?esc(p.NM):'-'}</b> (รหัสประจำตัวผู้ป่วย ${esc(v?v.HN:'-')}) อายุ ${p?age(p.BD):'-'} ปี<br>${esc(h.VN)} แผนก${v?esc(dn(v.DEP)):'-'}</p><div class='vit'>${ch.map(c=>`<div class='${c[3]?'w':''}'><small>${c[0]}</small><b>${esc(c[1])}</b><small>${c[2]}</small></div>`).join('')}</div>${tx('อาการสำคัญ',h.CC)}${tx('ประวัติเจ็บป่วยปัจจุบัน',h.PI)}${tx('ประวัติเจ็บป่วยในอดีต',h.PM)}<p><b>ประวัติแพ้ยา / แพ้อาหาร:</b> ${isAl(h.AL)?`<span class='wv'>${esc(h.AL)}</span>`:esc(h.AL)}</p>${tx('ยาที่กำลังรับประทานอยู่',h.CM)}<div class='sig'>ผู้ซักประวัติ ${esc(dnm(h.EMP))}<br>พยาบาล</div></div>`;
+ $('#hdlg').showModal()}
+$('#ht-list').onclick=()=>htab('list');$('#ht-form').onclick=()=>hOpen();$('#goHist').onclick=()=>hOpen();$('#hcancel').onclick=()=>htab('list');
+$('#hq').oninput=hRender;$('#hfl').onchange=hRender;
+$('#hrows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;var h=hist.filter(x=>x.HID==(b.dataset.v||b.dataset.e))[0];if(!h)return;if(b.dataset.v)hShow(h);else hOpen(h)};
+$('#hdClose').onclick=()=>$('#hdlg').close();$('#hdPrint').onclick=()=>window.print();
+$('#n-scr').onclick=()=>{view('scr');hRender()};
+var items=[{id:'CI001',nm:'ค่าตรวจรักษาโดยแพทย์ (Doctor Fee)',pr:500,ct:'ค่าธรรมเนียมแพทย์'},{id:'CI002',nm:'ค่าตรวจรักษาโดยแพทย์เฉพาะทาง',pr:800,ct:'ค่าธรรมเนียมแพทย์'},{id:'CI003',nm:'ค่าทำแผล',pr:300,ct:'หัตถการ'},{id:'CI004',nm:'ค่าเย็บแผล',pr:1200,ct:'หัตถการ'},{id:'CI005',nm:'ค่าผ่าตัดไส้ติ่ง',pr:35000,ct:'หัตถการ'},{id:'CI006',nm:'ค่าเอ็กซเรย์ปอด',pr:450,ct:'รังสีวิทยา'},{id:'CI007',nm:'ค่าตรวจเลือด CBC',pr:250,ct:'ห้องปฏิบัติการ'},{id:'CI008',nm:'ค่าอัลตราซาวด์',pr:900,ct:'รังสีวิทยา'},{id:'CI009',nm:'ค่าห้องพักผู้ป่วย (ต่อวัน)',pr:1800,ct:'ค่าห้องและเตียง'},{id:'CI010',nm:'ค่าให้น้ำเกลือ',pr:350,ct:'หัตถการ'}];
+var chg=[],gEdit=null,GTABS=['list','form','item'];
+function iget(id){return items.filter(x=>x.id==id)[0]}
+function inm(id){var i=iget(id);return i?i.nm:id}
+function isBilled(vn){return bills.some(b=>b.VN==vn)}
+function genCH(s){return seqId(chg,'CHID','CH',s)}
+function chgSum(vn){return r2(chg.filter(c=>c.VN==vn).reduce((a,c)=>a+c.AMT,0))}
+[[0,'E0001','CI001',1],[0,'E0001','CI007',1],[0,'E0001','CI006',1],[0,'E0001','CI003',1],[0,'E0001','CI010',1],[1,'E0002','CI002',1],[1,'E0002','CI008',1],[1,'E0002','CI006',1],[1,'E0002','CI007',1],[1,'E0002','CI003',1],[1,'E0002','CI001',1],[2,'E0001','CI001',1],[2,'E0001','CI007',1],[2,'E0001','CI006',1],[3,'E0003','CI002',1],[3,'E0003','CI009',2,'พักรักษาตัว 2 วัน'],[3,'E0003','CI006',1],[3,'E0003','CI007',1],[3,'E0003','CI003',1],[4,'E0001','CI001',1],[4,'E0001','CI007',1]].forEach(r=>{var v=visits[r[0]],it=iget(r[2]);chg.push({CHID:genCH(v.VD),VN:v.VN,DOC:r[1],ITEM:r[2],QTY:r[3],AMT:r2(it.pr*r[3]),DT:v.VD,RM:r[4]||''})});
+function gRender(){
+ var q=$('#gq').value.trim().toLowerCase(),fl=$('#gfl').value;
+ var list=chg.filter(c=>{var v=vget(c.VN),p=v&&pt(v.HN);return (!fl||!isBilled(c.VN))&&(!q||[c.CHID,c.VN,p?p.NM:'',inm(c.ITEM)].join(' ').toLowerCase().indexOf(q)>-1)}).sort((a,b)=>a.CHID<b.CHID?1:-1);
+ $('#grows').innerHTML=list.length?list.map(c=>{var v=vget(c.VN),p=v&&pt(v.HN),it=iget(c.ITEM);return `<tr><td class='mono'><b>${esc(c.CHID)}</b></td><td>${p?esc(p.NM):'-'}<br><small style='color:var(--mute)'>${esc(c.VN)}</small></td><td>${esc(inm(c.ITEM))}<br><small style='color:var(--mute)'>${it?esc(it.ct):''}${c.RM?' | '+esc(c.RM):''}</small></td><td class='mono'>${c.QTY}</td><td class='mono'><b>${fm(c.AMT)}</b></td><td>${esc(dnm(c.DOC))}</td><td class='mono'>${fmtDT(c.DT)}</td><td><div class='acts'>${isBilled(c.VN)?`<span class='pill off'>ออกใบแจ้งหนี้แล้ว</span>`:`<button class='btn sm' data-e='${esc(c.CHID)}'>แก้ไข</button><button class='btn sm danger' data-d='${esc(c.CHID)}'>ลบ</button>`}</div></td></tr>`}).join(''):`<tr><td colspan='8' class='empty'>${chg.length?'ไม่พบรายการที่ตรงกับเงื่อนไข':'ยังไม่มีรายการค่าใช้จ่าย กด บันทึกค่าใช้จ่าย เพื่อเริ่ม'}</td></tr>`;
+ $('#krows').innerHTML=items.map(i=>`<tr><td class='mono'><b>${i.id}</b></td><td>${esc(i.nm)}</td><td>${esc(i.ct)}</td><td class='mono'>${fm(i.pr)}</td><td>${chg.filter(c=>c.ITEM==i.id).length} ครั้ง</td><td><div class='acts'><button class='btn sm danger' data-d='${i.id}'>ลบ</button></div></td></tr>`).join('');
+ $('#kcl').innerHTML=Array.from(new Set(items.map(i=>i.ct))).map(c=>`<option value='${esc(c)}'>`).join('');
+ var t=nowLocal().slice(0,10),un=Array.from(new Set(chg.map(c=>c.VN))).filter(v=>!isBilled(v));
+ $('#gToday').textContent=chg.filter(c=>c.DT.slice(0,10)==t).length;$('#gSum').textContent=fm(chg.reduce((a,c)=>a+c.AMT,0));$('#gUn').textContent=un.length;
+}
+function gtab(n){GTABS.forEach(k=>{$('#gp-'+k).hidden=k!=n;$('#gt-'+k).setAttribute('aria-selected',k==n)})}
+function gCalc(){var i=iget($('#GIT').value),q=parseInt($('#GQT').value);$('#GAM').value=(i&&q>0)?r2(i.pr*q).toFixed(2):''}
+function gOpen(c){
+ gEdit=c?c.CHID:null;
+ var free=visits.filter(v=>c?v.VN==c.VN:!isBilled(v.VN)).sort((a,b)=>a.VD<b.VD?1:-1);
+ $('#GVN').innerHTML=`<option value=''>${free.length?'เลือก VN':'ไม่มี VN ที่บันทึกค่าใช้จ่ายได้'}</option>`+free.map(v=>{var p=pt(v.HN);return `<option value='${esc(v.VN)}'>${esc(v.VN)} - ${p?esc(p.NM):esc(v.HN)} (${esc(dn(v.DEP))})</option>`}).join('');
+ $('#GDOC').innerHTML=`<option value=''>เลือกแพทย์</option>`+docs.map(d=>`<option value='${d[0]}'>${esc(d[1])}</option>`).join('');
+ $('#GIT').innerHTML=`<option value=''>เลือกรายการบริการ</option>`+items.map(i=>`<option value='${i.id}'>${esc(i.nm)} (${fm(i.pr)})</option>`).join('');
+ var v=c||{DT:nowLocal(),VN:'',DOC:'',ITEM:'',QTY:1,AMT:'',RM:''};
+ $('#GDT').value=v.DT;$('#GID').value=c?c.CHID:genCH(v.DT);$('#GVN').value=v.VN;$('#GVN').disabled=!!c;$('#GDOC').value=v.DOC;$('#GIT').value=v.ITEM;$('#GQT').value=v.QTY;$('#GAM').value=v.AMT===''?'':Number(v.AMT).toFixed(2);$('#GRM').value=v.RM;
+ $('#gpv').className='pv';if(c)$('#GVN').onchange();fClear('#gf');
+ $('#gfTitle').textContent=c?'แก้ไขค่าใช้จ่าย '+c.CHID:'บันทึกค่าใช้จ่ายของแพทย์';$('#gsave').textContent=c?'บันทึกการแก้ไข':'บันทึกค่าใช้จ่าย';
+ gtab('form');if(!c)$('#GVN').focus();
+}
+$('#GVN').onchange=()=>{var v=vget($('#GVN').value),p=v&&pt(v.HN),b=$('#gpv');if(!v){b.className='pv';return}var n=chg.filter(c=>c.VN==v.VN).length;b.className='pv on';b.innerHTML=`<b>${p?esc(p.NM):'-'}</b> (${esc(v.HN)})<br>แผนก${esc(dn(v.DEP))} บันทึกแล้ว ${n} รายการ รวม ${fm(chgSum(v.VN))} บาท`};
+$('#GIT').onchange=gCalc;$('#GQT').oninput=gCalc;
+$('#GDT').oninput=()=>{if($('#GDT').value&&!gEdit)$('#GID').value=genCH($('#GDT').value)};
+$('#gf').onsubmit=ev=>{ev.preventDefault();
+ var v={VN:$('#GVN').value,DOC:$('#GDOC').value,ITEM:$('#GIT').value,QTY:parseInt($('#GQT').value),AMT:parseFloat($('#GAM').value),DT:$('#GDT').value,RM:$('#GRM').value.trim()};
+ var e=bad('#GVN',!!v.VN,'เลือก VN')+bad('#GDOC',!!v.DOC,'เลือกแพทย์ผู้บันทึก')+bad('#GIT',!!v.ITEM,'เลือกรายการบริการ')+bad('#GDT',!!v.DT,'เลือกวันและเวลา')+bad('#GQT',v.QTY>=1&&v.QTY<=9999,'จำนวนครั้ง 1 ถึง 9999')+bad('#GAM',v.AMT>=0&&v.AMT<=99999999.99,'กรอกจำนวนเงินให้ถูกต้อง');
+ if(e)return;
+ v.AMT=r2(v.AMT);
+ if(gEdit){chg=chg.map(c=>c.CHID==gEdit?Object.assign({},c,v):c);toast('บันทึกการแก้ไขแล้ว')}else{v.CHID=genCH(v.DT);chg.push(v);toast('บันทึกค่าใช้จ่ายแล้ว: '+v.CHID)}
+ gRender();gtab('list')};
+$('#grows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;var id=b.dataset.e||b.dataset.d,c=chg.filter(x=>x.CHID==id)[0];if(!c)return;
+ if(isBilled(c.VN)){toast('แก้ไขไม่ได้ VN นี้ออกใบแจ้งหนี้แล้ว');return}
+ if(b.dataset.e){gOpen(c);return}
+ if(confirm('ลบรายการค่าใช้จ่าย '+id+' ใช่หรือไม่?')){chg=chg.filter(x=>x.CHID!=id);gRender();toast('ลบรายการแล้ว')}};
+$('#kf').onsubmit=ev=>{ev.preventDefault();var n=$('#KNM').value.trim(),p=parseFloat($('#KPR').value),c=$('#KCT').value.trim();
+ var e=bad('#KNM',!!n&&!items.some(i=>i.nm==n),n?'มีรายการนี้แล้ว':'กรอกชื่อค่าบริการ')+bad('#KPR',p>=0&&p<=99999999.99,'กรอกราคามาตรฐาน')+bad('#KCT',!!c,'กรอกหมวดหมู่');
+ if(e)return;
+ items.push({id:nid(items,'CI',3),nm:n,pr:r2(p),ct:c});$('#kf').reset();gRender();toast('เพิ่มรายการค่าบริการแล้ว')};
+$('#krows').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;var id=b.dataset.d;
+ if(chg.some(c=>c.ITEM==id)){toast('ลบไม่ได้ มีการบันทึกค่าใช้จ่ายจากรายการนี้');return}
+ if(confirm('ลบรายการค่าบริการ '+inm(id)+' ใช่หรือไม่?')){items=items.filter(i=>i.id!=id);gRender();toast('ลบรายการแล้ว')}};
+$('#gt-list').onclick=()=>gtab('list');$('#gt-form').onclick=()=>gOpen();$('#gt-item').onclick=()=>gtab('item');$('#goChg').onclick=()=>gOpen();$('#gcancel').onclick=()=>gtab('list');
+$('#gq').oninput=gRender;$('#gfl').onchange=gRender;
+$('#FV').addEventListener('change',()=>{var s=chgSum($('#FV').value);if(s>0){$('#FTOT').value=s.toFixed(2);fNet();$('#fpv').innerHTML+=`<br>ยอดรวมจากรายการค่าใช้จ่ายที่บันทึกไว้ ${fm(s)} บาท (${chg.filter(c=>c.VN==$('#FV').value).length} รายการ)`}});
+$('#n-chg').onclick=()=>{view('chg');gRender()};
+var queues=[],QTABS=['board','list','form'],PRL={1:'ฉุกเฉิน',2:'เร่งด่วน',3:'ปกติ'},QST={'Waiting':['รอเรียก','pill amber'],'In-Room':['กำลังตรวจ','pill'],'Completed':['ตรวจเสร็จ','pill off'],'Cancelled':['ยกเลิก','pill warn']};
+function genQ(d){return seqId(queues,'QID','Q',d)}
+function genQN(pr,d){var p={1:'E',2:'U',3:'A'}[pr];return p+String(queues.filter(q=>q.DT==d&&q.QN[0]==p).length+1).padStart(3,'0')}
+function qget(id){return queues.filter(x=>x.QID==id)[0]}
+function qdept(q){return (vget(q.VN)||{}).DEP}
+function qsort(a,b){return a.PR-b.PR||(a.QID<b.QID?-1:1)}
+[['HN000001','D006','10:10'],['HN000002','D004','10:20'],['HN000003','D002','10:30'],['HN000002','D007','10:55']].forEach(r=>{var d=dAgo(0,r[2]);visits.push({VN:genVN(d),HN:r[0],DEP:r[1],VD:d})});
+[[0,3,'Completed'],[1,3,'Completed'],[2,3,'Completed'],[3,3,'In-Room'],[4,3,'Waiting'],[5,1,'Waiting'],[6,3,'Waiting'],[7,2,'Waiting']].forEach(r=>{var v=visits[r[0]],d=v.VD.slice(0,10);queues.push({QID:genQ(d),VN:v.VN,QN:genQN(r[1],d),DT:d,PR:r[1],ST:r[2]})});
+function qCard(q,btns){var v=vget(q.VN),p=v&&pt(v.HN);return `<div class='qk p${q.PR}'><div style='display:flex;justify-content:space-between;align-items:center'><span class='qn mono'>${esc(q.QN)}</span>${q.PR<3?`<span class='pill ${q.PR==1?'warn':'amber'}'>${PRL[q.PR]}</span>`:''}</div><div>${p?esc(p.NM):'-'}</div><small style='color:var(--mute)'>${v?esc(dn(v.DEP)):'-'} | ${esc(q.VN)}</small>${btns?`<div class='acts' style='justify-content:flex-start;margin-top:8px'>${btns}</div>`:''}</div>`}
+function qRender(){
+ var t=nowLocal().slice(0,10),cur=$('#qdep').value;
+ $('#qdep').innerHTML=`<option value=''>ทุกแผนก</option>`+deps.map(d=>`<option value='${d[0]}'>${esc(d[1])}</option>`).join('');$('#qdep').value=cur;
+ var dp=$('#qdep').value,td=queues.filter(q=>q.DT==t&&(!dp||qdept(q)==dp));
+ var W=td.filter(q=>q.ST=='Waiting').sort(qsort),R=td.filter(q=>q.ST=='In-Room').sort(qsort),D=td.filter(q=>q.ST=='Completed').sort((a,b)=>a.QID<b.QID?1:-1);
+ $('#qNow').innerHTML=`<span>กำลังตรวจ:</span>${R.length?R.map(q=>`<b class='mono'>${esc(q.QN)}</b>`).join(' '):`<span style='color:var(--mute)'>ไม่มี</span>`}<span style='flex:1'></span><button class='btn pri' data-n='1' ${W.length?'':'disabled'}>เรียกคิวถัดไป</button>`;
+ var em=m=>`<div class='empty'>${m}</div>`;
+ $('#qcw').innerHTML=W.length?W.map(q=>qCard(q,`<button class='btn sm pri' data-c='${q.QID}'>เรียกคิว</button><button class='btn sm danger' data-x='${q.QID}'>ยกเลิก</button>`)).join(''):em('ไม่มีคิวที่รอ');
+ $('#qci').innerHTML=R.length?R.map(q=>qCard(q,`<button class='btn sm pri' data-f='${q.QID}'>ตรวจเสร็จ</button><button class='btn sm danger' data-x='${q.QID}'>ยกเลิก</button>`)).join(''):em('ยังไม่มีคิวในห้องตรวจ');
+ $('#qcd').innerHTML=D.length?D.map(q=>qCard(q,'')).join(''):em('ยังไม่มีคิวที่ตรวจเสร็จ');
+ $('#qnw').textContent=W.length;$('#qni').textContent=R.length;$('#qnd').textContent=D.length;$('#qWait').textContent=W.length;$('#qRoom').textContent=R.length;$('#qDone').textContent=D.length;
+ var s=$('#qq').value.trim().toLowerCase(),fs=$('#qfs').value;
+ var L=queues.filter(q=>{var v=vget(q.VN),p=v&&pt(v.HN);return (!fs||q.ST==fs)&&(!s||[q.QID,q.QN,q.VN,p?p.NM:''].join(' ').toLowerCase().indexOf(s)>-1)}).sort((a,b)=>a.QID<b.QID?1:-1);
+ $('#qrows').innerHTML=L.length?L.map(q=>{var v=vget(q.VN),p=v&&pt(v.HN);return `<tr><td class='mono'><b>${esc(q.QID)}</b></td><td class='mono'><b>${esc(q.QN)}</b></td><td>${p?esc(p.NM):'-'}<br><small style='color:var(--mute)'>${esc(q.VN)}</small></td><td>${v?esc(dn(v.DEP)):'-'}</td><td>${fd(q.DT,1)}</td><td>${q.PR} - ${PRL[q.PR]}</td><td><span class='${QST[q.ST][1]}'>${QST[q.ST][0]}</span></td></tr>`}).join(''):`<tr><td colspan='7' class='empty'>ไม่พบรายการคิว</td></tr>`;
+}
+function qtab(n){QTABS.forEach(k=>{$('#qp-'+k).hidden=k!=n;$('#qt-'+k).setAttribute('aria-selected',k==n)})}
+function qOpts(){var d=$('#QDT').value;var free=visits.filter(v=>v.VD.slice(0,10)==d&&!queues.some(q=>q.VN==v.VN&&q.ST!='Cancelled')).sort((a,b)=>a.VD<b.VD?1:-1);
+ $('#QVN').innerHTML=`<option value=''>${free.length?'เลือก VN ที่ต้องการออกบัตรคิว':'ไม่มี VN ในวันนั้นที่ยังไม่ได้คิว'}</option>`+free.map(v=>{var p=pt(v.HN);return `<option value='${esc(v.VN)}'>${esc(v.VN)} - ${p?esc(p.NM):esc(v.HN)} (${esc(dn(v.DEP))})</option>`}).join('')}
+function qNum(){var d=$('#QDT').value,pr=parseInt($('#QPR').value);if(d&&pr){$('#QID').value=genQ(d);$('#QNM').value=genQN(pr,d)}}
+function qOpen(){$('#QDT').value=nowLocal().slice(0,10);$('#QPR').value='3';qOpts();qNum();$('#qpv').className='pv';fClear('#qf');qtab('form')}
+$('#QDT').onchange=()=>{qOpts();qNum();$('#qpv').className='pv'};$('#QPR').onchange=qNum;
+$('#QVN').onchange=()=>{var v=vget($('#QVN').value),p=v&&pt(v.HN),b=$('#qpv');if(!v){b.className='pv';return}b.className='pv on';b.innerHTML=`<b>${p?esc(p.NM):'-'}</b> (${esc(v.HN)}) อายุ ${p?age(p.BD):'-'} ปี<br>แผนก${esc(dn(v.DEP))} เข้ารับบริการ ${fmtDT(v.VD)}`};
+$('#qf').onsubmit=ev=>{ev.preventDefault();var vn=$('#QVN').value,d=$('#QDT').value,pr=parseInt($('#QPR').value);
+ var e=bad('#QVN',!!vn,'เลือก VN')+bad('#QDT',!!d,'เลือกวันที่')+bad('#QPR',pr>=1&&pr<=3,'เลือกลำดับความสำคัญ');
+ if(e)return;
+ var q={QID:genQ(d),VN:vn,QN:genQN(pr,d),DT:d,PR:pr,ST:'Waiting'};queues.push(q);
+ toast('ออกบัตรคิวแล้ว: '+q.QN);qRender();qtab('board')};
+$('#qp-board').onclick=ev=>{var b=ev.target.closest('button');if(!b)return;
+ if(b.dataset.n){var t=nowLocal().slice(0,10),dp=$('#qdep').value;var w=queues.filter(q=>q.DT==t&&q.ST=='Waiting'&&(!dp||qdept(q)==dp)).sort(qsort)[0];if(w){w.ST='In-Room';toast('เรียกคิว '+w.QN)}}
+ else{var q=qget(b.dataset.c||b.dataset.f||b.dataset.x);if(!q)return;
+  if(b.dataset.c){q.ST='In-Room';toast('เรียกคิว '+q.QN)}
+  else if(b.dataset.f){q.ST='Completed';toast('ตรวจเสร็จ '+q.QN)}
+  else if(confirm('ยกเลิกคิว '+q.QN+' ใช่หรือไม่?')){q.ST='Cancelled';toast('ยกเลิกคิวแล้ว')}}
+ qRender()};
+$('#qt-board').onclick=()=>{qtab('board');qRender()};$('#qt-list').onclick=()=>{qtab('list');qRender()};$('#qt-form').onclick=qOpen;$('#goQue').onclick=qOpen;$('#qcancel').onclick=()=>qtab('board');
+$('#qdep').onchange=qRender;$('#qq').oninput=qRender;$('#qfs').onchange=qRender;
+$('#n-que').onclick=()=>{view('que');qRender()};
+qRender();
+gRender();
+hRender();
+fRender();
+sync();sRender();
+cRender();
+vRender();
+$("#theme").onclick=function(){var r=document.documentElement,d=r.dataset.theme?r.dataset.theme=="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=d?"light":"dark"};
+render();
+</script>
+<script>
+(function(){
+var SM={Primary:'วินิจฉัยหลัก',Secondary:'วินิจฉัยร่วม',Ordered:'สั่งแล้ว',Dispensed:'จ่ายยาแล้ว',Completed:'เสร็จสิ้น',Scheduled:'นัดหมายแล้ว',Collected:'เก็บตัวอย่างแล้ว',Reported:'รายงานผลแล้ว',Available:'ว่าง',Occupied:'ไม่ว่าง',Admitted:'นอนโรงพยาบาล',Discharged:'จำหน่ายแล้ว',Transferred:'ส่งต่อ',Normal:'ปกติ',High:'สูง',Low:'ต่ำ'};
+var MT={},PM={R001:{APT:'r',AD:'r',DX:'a',RX:'a',RXD:'a',LT:'a',LR:'r',CO:'a',COD:'a',CR:'r',DIS:'r',DT:'r',DP:'r',DTR:'r',AG:'r'},R002:{AD:'a',BD:'r',WD:'r',APT:'a'},R003:{MED:'rw',RX:'r',RXD:'r',DSP:'a'},R006:{LT:'r',LR:'a',LI:'rw',LC:'rw'},R007:{CO:'r',COD:'r',CR:'a',CI:'rw'},R009:{DIS:'rw',DT:'rw',DP:'rw',DTR:'rw',AG:'rw',WD:'rw',BD:'rw'}},lv=n=>(PM[one('EMP','id',$('#cu').value).role]||{})[n]||'',tabOk=(k,n)=>!!lv(n);
+var R={VN:{r:()=>visits,i:'VN',l:v=>v.VN+' · '+((pt(v.HN)||{}).NM||v.HN)},HN:{r:()=>pts,i:'HN',l:p=>p.HN+' · '+p.NM},EMP:{r:()=>emps,i:'id',l:e=>e.nm},DEPT:{r:()=>depts,i:'id',l:d=>d.nm}},Ts={},MODS={},ST={};
+roles.push({id:'R006',nm:'นักเทคนิคการแพทย์'});
+depts.push({id:'D011',nm:'ห้องยา',loc:'อาคารผู้ป่วยนอก ชั้น 1'},{id:'D012',nm:'ห้องปฏิบัติการ',loc:'อาคารผู้ป่วยนอก ชั้น 1'});
+emps.push({id:'E0008',edid:'ED0008',nm:'ภญ.ภัทรา ยาดี',ph:'089-222-3308',em:'pattra@hospital.example',role:'R003',dep:'D011'},{id:'E0009',edid:'ED0009',nm:'นางสาวชลธิชา ห้องแล็บ',ph:'089-222-3309',em:'chonticha@hospital.example',role:'R006',dep:'D012'});
+roles.push({id:'R007',nm:'นักรังสีการแพทย์'});depts.push({id:'D013',nm:'ห้องรังสีวิทยา',loc:'อาคารผู้ป่วยนอก ชั้น 1'});emps.push({id:'E0010',edid:'ED0010',nm:'นายรังสิต ภาพถ่าย',ph:'089-222-3310',em:'rangsit@hospital.example',role:'R007',dep:'D013'});
+sync();sRender();
+function ft(s){var a=s.split('|');return{k:a[0],l:a[1].replace('?',''),o:a[1].slice(-1)=='?',t:a[2]||'t',x:a[3]||''}}
+function gen(T){var m=0;T.rows.forEach(r=>{var n=parseInt(String(r[T.pk]).replace(/\D/g,''))||0;if(n>m)m=n});return T.pre+String(m+1).padStart(4,'0')}
+function tbl(n,t,pre,f,o){var T={n:n,t:t,pre:pre,f:f.map(ft),rows:[],o:o||{}};T.pk=T.f[0].k;Ts[n]=T;R[n]={r:()=>T.rows,i:T.pk,l:T.o.l||(r=>r[T.pk])}}
+function sd(n,a){var T=Ts[n];a.forEach(v=>{var r={},j=0;T.f.forEach(f=>{r[f.k]=f.t=='id'?gen(T):v[j++]});T.rows.push(r)})}
+var nm=vn=>((pt((vget(vn)||{}).HN)||{}).NM||''),vn=i=>visits[i].VN,vd=i=>visits[i].VD,one=(n,k,v)=>R[n].r().filter(x=>x[k]==v)[0];
+tbl('DX','การวินิจฉัย','DG',['Diagnosis_ID|รหัสผลการวินิจฉัย|id','VN_ID|รหัสการเข้ารับบริการ (VN)|r|VN','Disease_ID|โรคตามมาตรฐาน (ICD-10)|r|DIS','Doctor_ID|แพทย์ผู้วินิจฉัย|r|EMP:R001','Diagnosis_Type|ประเภทการวินิจฉัย|s|Primary,Secondary','Diagnosis_Date|วันและเวลาที่วินิจฉัย|g','Clinical_Impression|บันทึกเพิ่มเติมของแพทย์?|a']);
+tbl('DIS','โรค','',['Disease_ID|รหัสโรค (ICD-10)|m|10','Disease_Name|ชื่อทางการแพทย์ของโรค|t|200','Common_Name|ชื่อเรียกทั่วไป|t|200','Disease_Category|หมวดหมู่ของโรค|t|100','Incubation_Period|ระยะฟักตัวของโรค|t|100'],{l:r=>r.Disease_ID+' · '+r.Common_Name});
+tbl('DT','การแพร่กระจาย','TR',['Transmission_ID|รหัสช่องทางการแพร่เชื้อ|id','Disease_ID|โรค|r|DIS','Transmission_Mode|รูปแบบการแพร่เชื้อ|t|150','Transmission_Detail|รายละเอียดการแพร่กระจาย?|a']);
+tbl('DP','ช่องทางเข้าสู่ร่างกาย','PT',['Portal_ID|รหัสช่องทางการรับเชื้อ|id','Disease_ID|โรค|r|DIS','Portal_Type|ประเภทช่องทาง|t|100','Portal_Detail|รายละเอียดช่องทาง?|a']);
+tbl('DTR','แนวทางการรักษา','TM',['Treatment_ID|รหัสข้อมูลการรักษา|id','Disease_ID|โรค|r|DIS','Treatment_Type|รูปแบบการรักษา|t|150','Treatment_Detail|รายละเอียดวิธีการรักษา?|a']);
+tbl('AG','เชื้อก่อโรค','AG',['Agent_ID|รหัสเชื้อก่อโรค|id','Disease_ID|โรค|r|DIS','Agent_Name|ชื่อเชื้อโรค/ไวรัส/แบคทีเรีย|t|150']);
+tbl('MED','ยา (คลังยา)','MD',['Medicine_ID|รหัสยา|id','Medicine_Name|ชื่อทางการค้า|t|150','Generic_Name|ชื่อสามัญทางยา|t|150','Dosage_Form|รูปแบบยา|t|50','Strength|ความแรงของยา|t|50','Unit|หน่วยนับ|t|30','Price_Per_Unit|ราคาต่อหน่วย (บาท)|n','Stock_Quantity|จำนวนคงเหลือในคลัง|n','Instruction_Template|วิธีใช้มาตรฐาน?|a'],{l:r=>r.Medicine_Name+' '+r.Strength+' (เหลือ '+r.Stock_Quantity+')'});
+tbl('RX','ใบสั่งยา','RX',['Prescription_ID|รหัสใบสั่งยา|id','VN_ID|รหัสการเข้ารับบริการ (VN)|r|VN','Doctor_ID|แพทย์ผู้สั่งจ่ายยา|r|EMP:R001','Prescription_Date|วันและเวลาที่สั่งยา|g','Prescription_Status|สถานะใบสั่งยา|s|Ordered,Dispensed'],{l:r=>r.Prescription_ID+' · '+nm(r.VN_ID)+' ('+(SM[r.Prescription_Status]||r.Prescription_Status)+')'});
+tbl('RXD','รายการยาที่สั่ง','PD',['PrescriptionDetail_ID|รหัสรายการยา|id','Prescription_ID|ใบสั่งยา|r|RX','Medicine_ID|ยา|r|MED','Quantity|จำนวนยาที่สั่งจ่าย|n','Dosage_Instruction|วิธีการใช้ยาที่แพทย์ระบุ|a'],{chk:v=>{var m=one('MED','Medicine_ID',v.Medicine_ID);return v.Quantity<1?'จำนวนต้องมากกว่า 0':m&&v.Quantity>m.Stock_Quantity?'ยาในคลังไม่พอ (เหลือ '+m.Stock_Quantity+')':''}});
+tbl('DSP','การจ่ายยา','DS',['Dispense_ID|รหัสการจ่ายยา|id','Prescription_ID|ใบสั่งยา (รอจ่าย)|r|RX:ord','Pharmacist_ID|เภสัชกรผู้จ่ายยา|r|EMP:R003','Dispense_DateTime|วันและเวลาที่ส่งมอบยา|g','Dispense_Status|สถานะการจ่ายยา|s|Completed','Pharmacist_Note|คำแนะนำพิเศษจากเภสัชกร?|a'],{hint:['Prescription_ID',id=>{var r=one('RX','Prescription_ID',id);return r?'<b style="color:#c0392b">ประวัติแพ้ยา/อาหารของผู้ป่วย: '+esc(alg(r.VN_ID)||'ไม่มีข้อมูลการแพ้')+'</b>':''}],post:v=>{var x=one('RX','Prescription_ID',v.Prescription_ID);x.Prescription_Status='Dispensed';R.RXD.r().filter(d=>d.Prescription_ID==x.Prescription_ID).forEach(d=>{var m=one('MED','Medicine_ID',d.Medicine_ID);if(m)m.Stock_Quantity=Math.max(0,m.Stock_Quantity-d.Quantity)})}});
+tbl('LC','กลุ่มการตรวจ LAB','LC',['Lab_Category_ID|รหัสกลุ่มการตรวจ|id','Category_Name|ชื่อกลุ่มการตรวจ|t|100'],{l:r=>r.Category_Name});
+tbl('LI','รายการตรวจ LAB','LI',['Lab_Item_ID|รหัสรายการตรวจ|id','Lab_Category_ID|กลุ่มการตรวจ|r|LC','Item_Name|ชื่อรายการตรวจ|t|150','Method|วิธีการวิเคราะห์|t|100','Specimen_Container|ภาชนะเก็บสิ่งส่งตรวจ|t|100','Is_Outsource|ส่งตรวจภายนอก|b','Normal_Range|ค่าอ้างอิงปกติ|t|100','Unit|หน่วย|t|30','Price|ราคา (บาท)|n'],{l:r=>r.Item_Name});
+tbl('LT','ใบสั่งตรวจ LAB','LO',['Lab_Order_ID|รหัสใบสั่งตรวจ|id','VN_ID|รหัสการเข้ารับบริการ (VN)|r|VN','Doctor_ID|แพทย์ผู้สั่งตรวจ|r|EMP:R001','Order_DateTime|วันและเวลาที่สั่งตรวจ|g','Specimen_Type|ชนิดสิ่งส่งตรวจ|t|50','Specimen_Volume|ปริมาณสิ่งส่งตรวจ|t|30','Collection_DateTime|เวลาที่เก็บสิ่งส่งตรวจ?|g','Collector_Employee_ID|ผู้เก็บสิ่งส่งตรวจ?|r|EMP:R002','Order_Status|สถานะใบสั่งตรวจ|s|Ordered,Collected,Reported'],{l:r=>r.Lab_Order_ID+' · '+nm(r.VN_ID)});
+tbl('LR','ผลตรวจ LAB','LD',['Lab_Detail_ID|รหัสผลการตรวจ|id','Lab_Order_ID|ใบสั่งตรวจ|r|LT','Lab_Item_ID|รายการตรวจ|r|LI','Result_Value|ค่าผลการตรวจ|t|100','Abnormal_Flag|ธงระบุความผิดปกติ|s|Normal,High,Low','Report_DateTime|วันและเวลาที่รายงานผล|g','Reporter_Employee_ID|ผู้รายงานผล|r|EMP:R006','Approver_Employee_ID|ผู้อนุมัติผล|r|EMP:R001','Lab_Note|ข้อคิดเห็น/หมายเหตุ?|a'],{post:v=>{var t=one('LT','Lab_Order_ID',v.Lab_Order_ID);if(t)t.Order_Status='Reported'}});
+tbl('WD','หอผู้ป่วย','WD',['Ward_ID|รหัสหอผู้ป่วย|id','Department_ID|แผนกที่สังกัด|r|DEPT','Ward_Name|ชื่อหอผู้ป่วย|t|150'],{l:r=>r.Ward_Name});
+tbl('BD','เตียงผู้ป่วย','BD',['Bed_ID|รหัสเตียง|id','Ward_ID|หอผู้ป่วย|r|WD','Bed_Number|หมายเลขเตียง|t|20','Bed_Type|ประเภทเตียง|s|ธรรมดา,พิเศษ','Bed_Status|สถานะเตียง|s|Available,Occupied'],{l:r=>r.Bed_Number+' · '+(one('WD','Ward_ID',r.Ward_ID)||{}).Ward_Name});
+tbl('AD','การรับผู้ป่วยใน (Admit)','AN',['AN|เลข AN|id','VN_ID|VN ที่ส่งแอดมิท|r|VN','HN|ผู้ป่วย (HN)|r|HN','Bed_ID|เตียงที่เข้าพัก (ว่างเท่านั้น)|r|BD:avail','Admit_Doctor_ID|แพทย์ผู้สั่งรับเข้านอน รพ.|r|EMP:R001','Admit_DateTime|วันและเวลาที่เริ่มนอน รพ.|g','Discharge_DateTime|วันและเวลาจำหน่าย?|g','Discharge_Status|สถานะการจำหน่าย|s|Admitted,Discharged,Transferred','Admit_Reason|สาเหตุ/ข้อบ่งชี้ที่ต้องนอน รพ.|a'],{vh:['VN_ID','HN'],post:v=>{one('BD','Bed_ID',v.Bed_ID).Bed_Status='Occupied'},chk:v=>v.Discharge_DateTime&&v.Discharge_DateTime<v.Admit_DateTime?'วันจำหน่ายต้องไม่ก่อนวันรับเข้า':'',act:[['จำหน่าย',r=>{r.Discharge_DateTime=nowLocal();r.Discharge_Status='Discharged';one('BD','Bed_ID',r.Bed_ID).Bed_Status='Available'},r=>!r.Discharge_DateTime]]});
+tbl('APT','นัดหมาย','AP',['Appointment_ID|รหัสใบนัดหมาย|id','HN|ผู้ป่วย (HN)|r|HN','VN_ID|การตรวจรอบที่ออกใบนัด (VN)|r|VN','Doctor_ID|แพทย์ที่นัดให้มาพบ|r|EMP:R001','Department_ID|ห้องตรวจ/แผนกที่นัดมา|r|DEPT','Disease_ID|โรคที่นัดมาติดตามผล?|r|DIS','Appointment_Date|วันที่นัดหมาย|d','Appointment_Time_Start|เวลาเริ่มต้นที่นัด|tm','Appointment_Time_End|เวลาสิ้นสุดการนัด|tm','Preparation_Instruction|คำแนะนำการปฏิบัติตัวก่อนมา?|a','Appointment_Status|สถานะการนัด|s|Scheduled,Completed','Created_By_Employee_ID|เจ้าหน้าที่ผู้ออกใบนัด|r|EMP','Created_DateTime|วันและเวลาที่บันทึกนัด|g'],{vh:['VN_ID','HN'],chk:v=>v.Appointment_Time_End<=v.Appointment_Time_Start?'เวลาสิ้นสุดต้องหลังเวลาเริ่มต้น':'',act:[['เสร็จสิ้น',r=>r.Appointment_Status='Completed',r=>r.Appointment_Status=='Scheduled']]});
+sd('DIS',[['J11','Influenza','ไข้หวัดใหญ่','โรคติดเชื้อทางเดินหายใจ','1-4 วัน'],['A90','Dengue fever','ไข้เลือดออก','โรคติดเชื้อนำโดยแมลง','3-14 วัน'],['K35','Acute appendicitis','ไส้ติ่งอักเสบเฉียบพลัน','โรคระบบทางเดินอาหาร','-'],['E11','Type 2 diabetes mellitus','เบาหวานชนิดที่ 2','โรคต่อมไร้ท่อและเมตาบอลิก','-'],['C73','Thyroid cancer','มะเร็งต่อมไทรอยด์','มะเร็ง','-']]);
+sd('DT',[['J11','ละอองฝอยทางเดินหายใจ','ไอ จาม สัมผัสใกล้ชิดผู้ป่วย']]);sd('DP',[['J11','เยื่อบุ','เยื่อบุจมูกและช่องปาก']]);sd('DTR',[['J11','ทานยา','ยาลดไข้ ยาต้านไวรัสตามดุลยพินิจแพทย์']]);sd('AG',[['J11','Influenza virus'],['A90','Dengue virus']]);
+sd('DX',[[vn(2),'J11','E0001','Primary',vd(2),'มีไข้สูง ไอ เจ็บคอ'],[vn(4),'E11','E0001','Primary',vd(4),'ติดตามระดับน้ำตาลในเลือด'],[vn(3),'K35','E0002','Primary',vd(3),'ปวดท้องน้อยด้านขวา สงสัยไส้ติ่งอักเสบ']]);
+sd('MED',[['Tylenol','Paracetamol','เม็ด','500 mg','เม็ด',1.5,500,'ครั้งละ 1 เม็ด ทุก 4-6 ชั่วโมง เมื่อมีไข้'],['Amoxil','Amoxicillin','แคปซูล','500 mg','แคปซูล',4,300,'ครั้งละ 1 แคปซูล วันละ 3 ครั้ง หลังอาหาร'],['ORS','Oral rehydration salts','ผงละลายน้ำ','-','ซอง',5,150,''],['Glucophage','Metformin','เม็ด','500 mg','เม็ด',2,400,'ครั้งละ 1 เม็ด วันละ 2 ครั้ง พร้อมอาหาร']]);
+sd('RX',[[vn(2),'E0001',vd(2),'Ordered'],[vn(4),'E0001',vd(4),'Ordered']]);
+sd('RXD',[[Ts.RX.rows[0].Prescription_ID,'MD0001',10,'ครั้งละ 1 เม็ด ทุก 6 ชั่วโมง เมื่อมีไข้'],[Ts.RX.rows[0].Prescription_ID,'MD0003',5,'ละลายน้ำดื่มเมื่อถ่ายเหลว']]);
+sd('LC',[['Routine (ตรวจทั่วไป)'],['Electrolyte']]);var lc=Ts.LC.rows;
+sd('LI',[[lc[0].Lab_Category_ID,'Blood Sugar (FBS)','Enzymatic (Hexokinase)','หลอดจุกเทา (Gray top)','0','70-100','mg/dL',80],[lc[0].Lab_Category_ID,'BUN','Urease','หลอดจุกแดง (Red top)','0','7-20','mg/dL',90],[lc[1].Lab_Category_ID,'Sodium (Na)','ISE','หลอดจุกเขียว (Green top)','0','135-145','mmol/L',120]]);
+sd('LT',[[vn(2),'E0001',vd(2),'Blood','5 mL',vd(2),'E0005','Reported']]);
+sd('LR',[[Ts.LT.rows[0].Lab_Order_ID,'LI0001','112','High',vd(2),'E0009','E0001','']]);
+sd('WD',[['D001','หอผู้ป่วยอายุรกรรม'],['D002','หอผู้ป่วยศัลยกรรม']]);var wd=Ts.WD.rows;
+sd('BD',[[wd[0].Ward_ID,'101','ธรรมดา','Available'],[wd[0].Ward_ID,'102','ธรรมดา','Available'],[wd[0].Ward_ID,'103','พิเศษ','Available'],[wd[1].Ward_ID,'201','ธรรมดา','Occupied'],[wd[1].Ward_ID,'202','พิเศษ','Available']]);
+sd('AD',[[vn(3),'HN000001','BD0004','E0002',vd(3),'','Admitted','ปวดท้องน้อยขวาเฉียบพลัน สงสัยไส้ติ่งอักเสบ']]);
+sd('APT',[['HN000003',vn(2),'E0001','D001','E11',ymd(new Date(Date.now()+7*864e5)),'09:00','09:30','งดน้ำและอาหารก่อนเจาะเลือด 8 ชั่วโมง','Scheduled','E0006',nowLocal()]]);
+tbl('CI','รายการตรวจ CT Scan','CI',['CT_Item_ID|รหัสรายการตรวจ CT|id','CT_Item_Name|ชื่อรายการตรวจ (เช่น Brain death study)|t|150','Category|หมวดหมู่อวัยวะ (เช่น BRAIN, BONE)|t|50','Price|ราคาค่าตรวจรังสี (บาท)|n'],{l:r=>r.CT_Item_Name});
+tbl('CO','ใบสั่งตรวจ CT Scan','CT',['CT_Order_ID|รหัสใบสั่งตรวจ CT|id','VN_ID|รหัสการเข้ารับบริการ (VN)|r|VN','Doctor_ID|แพทย์ผู้สั่งตรวจ|r|EMP:R001','Order_Date|วันและเวลาที่สั่งตรวจ|g','Clinical_History|ข้อมูลทางคลินิก/ข้อบ่งชี้ในการส่งตรวจ|a','Is_Pregnant|ผู้ป่วยตั้งครรภ์/ให้นมบุตร|b'],{l:r=>r.CT_Order_ID+' · '+nm(r.VN_ID)});
+tbl('COD','รายการตรวจในใบสั่ง','CD',['CT_Detail_ID|รหัสรายการในใบสั่งตรวจ|id','CT_Order_ID|ใบสั่งตรวจ CT|r|CO','CT_Item_ID|รายการตรวจ CT|r|CI'],{l:r=>r.CT_Detail_ID+' · '+((one('CI','CT_Item_ID',r.CT_Item_ID)||{}).CT_Item_Name||''),chk:v=>{var o=one('CO','CT_Order_ID',v.CT_Order_ID);return o&&o.Is_Pregnant=='1'&&!confirm('ผู้ป่วยตั้งครรภ์/ให้นมบุตร ยืนยันเพิ่มรายการตรวจ CT หรือไม่?')?'ยกเลิกการเพิ่มรายการ':''}});
+tbl('CR','ผลตรวจ CT Scan','CX',['CT_Result_ID|รหัสผลการตรวจ CT|id','CT_Detail_ID|รายการตรวจในใบสั่ง|r|COD','Radiologist_ID|นักเทคนิครังสี/รังสีแพทย์ผู้อ่านผล|r|EMP:R007','Result_Text|ผลการตรวจและการแปลผลภาพรังสี|a','Image_File_Path|ลิงก์ไฟล์ภาพสแกน (DICOM/JPG)|t|255','Result_DateTime|วันและเวลาที่รายงานผล|g']);
+sd('CI',[['CT Brain without contrast','BRAIN',3500],['CT Chest','CHEST',4200],['CT Abdomen','ABDOMEN',4800],['CT Cervical spine','BONE',3800]]);
+sd('CO',[[vn(2),'E0001',vd(2),'ปวดศีรษะรุนแรง 3 วัน สงสัยเลือดออกในสมอง','0']]);
+sd('COD',[[Ts.CO.rows[0].CT_Order_ID,'CI0001']]);
+sd('CR',[[Ts.COD.rows[0].CT_Detail_ID,'E0010','ไม่พบเลือดออกในเนื้อสมอง ไม่พบก้อนผิดปกติ','images/ct-0001.jpg',vd(2)]]);
+function txt(f,v){if(v===''||v==null)return '-';if(f.t=='r'){var n=f.x.split(':')[0],o=one(n,R[n].i,v);return o?R[n].l(o):v}if(f.t=='g')return fmtDT(v);if(f.t=='d')return thDate(v);if(f.t=='b')return v=='1'?'ใช่':'ไม่ใช่';if(f.t=='s')return SM[v]||v;return v}
+function opts(f){var a=f.x.split(':'),n=a[0],rr=R[n].r().filter(r=>a[1]=='avail'?r.Bed_Status=='Available':a[1]=='ord'?r.Prescription_Status=='Ordered':a[1]?r.role==a[1]:1);return '<option value="">— เลือก —</option>'+rr.map(r=>`<option value="${esc(r[R[n].i])}">${esc(R[n].l(r))}</option>`).join('')}
+function inp(f,T){var id='k-'+f.k;
+ if(f.t=='id')return `<input id="${id}" readonly value="${gen(T)}">`;
+ if(f.t=='a')return `<textarea id="${id}" rows="3"></textarea>`;
+ if(f.t=='r')return `<select id="${id}">${opts(f)}</select>`;
+ if(f.t=='s'||f.t=='b')return `<select id="${id}">${(f.t=='b'?['0:ไม่ใช่','1:ใช่']:f.x.split(',').map(x=>x+':'+(SM[x]||x))).map(x=>{var p=x.split(':');return `<option value="${p[0]}">${p[1]}</option>`}).join('')}</select>`;
+ var ty={t:'text',m:'text',n:'number',d:'date',g:'datetime-local',tm:'time'}[f.t];
+ return `<input id="${id}" type="${ty}"${f.t=='t'||f.t=='m'?` maxlength="${f.x||150}"`:''}${f.t=='n'?' min="0" step="0.01" inputmode="decimal"':''}${f.t=='d'?` value="${ymd(new Date())}"`:''}${f.t=='g'?` value="${nowLocal()}"`:''}>`}
+function list(k){var T=Ts[ST[k]],q=($('#q-'+k).value||'').toLowerCase(),cf=T.f.filter(f=>f.t!='a').slice(0,6),rows=T.rows.filter(r=>!q||cf.map(f=>txt(f,r[f.k])).join(' ').toLowerCase().indexOf(q)>-1);
+ $('#l-'+k).innerHTML=`<table><thead><tr>${cf.map(f=>`<th>${f.l}</th>`).join('')}<th></th></tr></thead><tbody>${rows.length?rows.map(r=>`<tr>${cf.map(f=>`<td>${f.t=='id'?`<span class="hn">${esc(r[f.k])}</span>`:f.t=='s'?`<span class="pill">${esc(SM[r[f.k]]||r[f.k])}</span>`:esc(txt(f,r[f.k]))}</td>`).join('')}<td><div class="acts">${(T.o.act||[]).filter(a=>a[2](r)&&lv(T.n)!='r').map(a=>`<button class="btn sm" data-a="${a[0]}" data-p="${esc(r[T.pk])}">${a[0]}</button>`).join('')}<button class="btn sm" data-i="${esc(r[T.pk])}">ดู</button>${lv(T.n)=='rw'?`<button class="btn sm danger" data-d="${esc(r[T.pk])}">ลบ</button>`:''}</div></td></tr>`).join(''):`<tr><td colspan="${cf.length+1}" class="empty">ยังไม่มีข้อมูล กด เพิ่ม เพื่อเริ่มบันทึก</td></tr>`}</tbody></table>`}
+function show(k,n){if(!tabOk(k,n))n=MT[k].filter(x=>tabOk(k,x))[0];ST[k]=n;var T=Ts[n];document.querySelectorAll('#v-'+k+' .tabs button').forEach(b=>{b.setAttribute('aria-selected',b.dataset.t==n);b.style.display=tabOk(k,b.dataset.t)?'':'none'});
+ $('#c-'+k).innerHTML=`<div id="m-${k}"><div class="tools"><input id="q-${k}" type="search" placeholder="ค้นหา..." aria-label="ค้นหา">${lv(n)=='r'?'':`<button class="btn pri" id="a-${k}">+ เพิ่ม${T.t}</button>`}</div><div class="wrap" id="l-${k}"></div></div><div id="w-${k}" hidden></div>`;
+ $('#q-'+k).oninput=()=>list(k);if($('#a-'+k))$('#a-'+k).onclick=()=>form(k);list(k)}
+function form(k){var T=Ts[ST[k]],w=$('#w-'+k);if(lv(T.n)=='r')return;$('#m-'+k).hidden=true;w.hidden=false;
+ w.innerHTML=`<h2 style="margin:0 0 16px;font-size:18px">เพิ่ม${T.t}</h2><form id="f-${k}" novalidate>${T.f.map(f=>`<div class="f${f.t=='a'?' full':''}"><label for="k-${f.k}">${f.l}${f.o?' <small>ไม่บังคับ</small>':''}</label>${inp(f,T)}<div class="err"></div></div>`).join('')}<div class="formact"><button type="button" class="btn" id="x-${k}">ยกเลิก</button><button class="btn pri">บันทึก</button></div></form>`;
+ $('#x-'+k).onclick=()=>show(k,T.n);
+ if(T.o.hint){var hf=$('#k-'+T.o.hint[0]),hb=document.createElement('div');hb.className='hint';hf.parentNode.insertBefore(hb,hf.nextSibling);hf.onchange=()=>{hb.innerHTML=T.o.hint[1](hf.value)}}
+ var cv=$('#k-VN_ID');if(cv&&ctx.vn){cv.value=ctx.vn;if(cv.onchange)cv.onchange()}['Doctor_ID','Admit_Doctor_ID'].forEach(id=>{var d=$('#k-'+id),u=$('#cu').value;if(d&&[...d.options].some(o=>o.value==u))d.value=u});
+ if(T.o.vh){var vs=$('#k-'+T.o.vh[0]);vs.onchange=()=>{var v=vget(vs.value);if(v)$('#k-'+T.o.vh[1]).value=v.HN}}
+ $('#f-'+k).onsubmit=e=>{e.preventDefault();var v={},bad=0;
+  T.f.forEach(f=>{var el=$('#k-'+f.k),val=el.value.trim(),er=el.parentNode.querySelector('.err'),m='';er.textContent='';el.classList.remove('bad');
+   if(!val&&!f.o&&f.t!='id')m=(f.t=='r'?'เลือก ':'กรอก ')+f.l;
+   else if(f.t=='m'&&T.rows.some(r=>r[f.k]==val))m='รหัสนี้มีอยู่แล้ว';
+   else if(f.t=='n'&&val&&+val<0)m='ต้องไม่ติดลบ';
+   if(m){er.textContent=m;el.classList.add('bad');bad++}v[f.k]=f.t=='n'&&val!==''?+val:val});
+  if(bad)return;var m=T.o.chk&&T.o.chk(v);if(m){toast(m);return}
+  T.rows.push(v);if(T.o.post)T.o.post(v);toast('บันทึก'+T.t+'แล้ว');show(k,T.n)}}
+var ns=document.querySelectorAll('nav .sub'),setB=ns[ns.length-1];document.querySelectorAll('nav button[disabled]').forEach(b=>b.remove());
+function mod(k,nav,tabs){MODS[k]=1;MT[k]=tabs;var v=document.createElement('div');v.id='v-'+k;v.hidden=true;
+ v.innerHTML=`<header class="top"><div><div class="crumb">${nav} › บันทึกข้อมูล</div><h1>${nav.replace('ระบบ','')}</h1></div></header><div class="tabs" role="tablist">${tabs.map(n=>`<button role="tab" data-t="${n}" aria-selected="false">${Ts[n].t}</button>`).join('')}</div><div class="card" id="c-${k}"></div>`;
+ $('main').appendChild(v);v.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>show(k,b.dataset.t));
+ var nb=document.createElement('button');nb.id='n-'+k;nb.textContent=nav;nb.onclick=()=>{view(k);show(k,ST[k]||tabs[0])};setB.parentNode.insertBefore(nb,setB);
+ $('#c-'+k).onclick=e=>{var b=e.target.closest('button');if(!b)return;var T=Ts[ST[k]],id=b.dataset.p||b.dataset.i||b.dataset.d,r=T.rows.filter(x=>x[T.pk]==id)[0];if(!r)return;
+  if(b.dataset.a){T.o.act.filter(a=>a[0]==b.dataset.a)[0][1](r);toast('ดำเนินการแล้ว');list(k)}
+  else if(b.dataset.i){$('#kh').textContent=T.t+' '+id;$('#kd').innerHTML=T.f.map(f=>`<dt>${f.l}</dt><dd>${esc(txt(f,r[f.k]))}</dd>`).join('');$('#kdlg').showModal()}
+  else if(b.dataset.d&&lv(T.n)=='rw'){if(Object.keys(Ts).some(n=>Ts[n].rows.some(x=>Ts[n].f.some(f=>f.t=='r'&&f.x.split(':')[0]==T.n&&x[f.k]==id))))return toast('ลบไม่ได้ มีข้อมูลอื่นอ้างอิงรายการนี้อยู่');
+   if(confirm('ลบ '+id+' ใช่หรือไม่?')){T.rows=T.rows.filter(x=>x!=r);list(k);toast('ลบแล้ว')}}}}
+mod('dx','ระบบวินิจฉัยโรค',['DX']);mod('dis','ระบบฐานข้อมูลโรค',['DIS','DT','DP','DTR','AG']);mod('rx','ระบบยาและเภสัชกรรม',['MED','RX','RXD','DSP']);mod('lab','ระบบตรวจทางห้องปฏิบัติการ (Lab)',['LT','LR','LI','LC']);mod('adm','ระบบผู้ป่วยใน (แอดมิท)',['AD','BD','WD']);mod('apt','ระบบนัดหมาย',['APT']);
+mod('ct','ระบบตรวจ CT Scan / รังสี',['CO','COD','CR','CI']);
+roles.push({id:'R008',nm:'ผู้บริหาร'});roles.push({id:'R009',nm:'ผู้ดูแลระบบ (Admin)'});emps.push({id:'E0012',edid:'ED0012',nm:'นายอดิศร ดูแลระบบ',ph:'089-222-3312',em:'adisorn@hospital.example',role:'R009',dep:'D001'});emps.push({id:'E0011',edid:'ED0011',nm:'ผศ.นพ.อำนวย บริหารดี',ph:'089-222-3311',em:'amnuay@hospital.example',role:'R008',dep:'D001'});sync();sRender();
+var ex={tab:'p',hn:''},EXT=[['p','ข้อมูลผู้ป่วยและประวัติการรักษา'],['s','สถิติการรักษาและการใช้บริการ'],['m','สรุปรายได้และค่าใช้จ่าย'],['u','สถิติการใช้ระบบและอื่น ๆ']];
+var money=n=>n.toLocaleString('th-TH',{minimumFractionDigits:2,maximumFractionDigits:2}),sum=(a,f)=>a.reduce((s,x)=>s+f(x),0),dn=id=>(one('DEPT','id',id)||{}).nm||id,dsn=id=>{var d=one('DIS','Disease_ID',id);return d?d.Common_Name:id};
+var cnt=(a,f)=>{var o={};a.forEach(x=>{var k=f(x);o[k]=(o[k]||0)+1});return Object.keys(o).map(k=>[k,o[k]]).sort((a,b)=>b[1]-a[1])};
+var st=(v,l)=>`<div class="stat"><b>${v}</b><span>${l}</span></div>`,sts=a=>`<section class="stats" style="grid-template-columns:repeat(auto-fit,minmax(150px,1fr))">${a.join('')}</section>`;
+var box=(t,h)=>`<div class="card" style="margin-bottom:16px"><h2 style="margin:0 0 10px;font-size:16px">${t}</h2>${h}</div>`;
+var bars=a=>{var m=Math.max(1,...a.map(x=>x[1]));return a.map(x=>`<div style="display:grid;grid-template-columns:minmax(90px,170px) 1fr 100px;gap:10px;align-items:center;margin:6px 0;font-size:13px"><span>${esc(x[0])}</span><div style="background:var(--tint);border-radius:99px;height:10px"><div style="width:${x[1]/m*100}%;background:var(--brand);height:10px;border-radius:99px"></div></div><b style="text-align:right">${x[2]||x[1]}</b></div>`).join('')||'<p class="empty">ไม่มีข้อมูล</p>'};
+var X={
+p:()=>{var sel=`<div class="f" style="max-width:420px"><label for="xhn">เลือกผู้ป่วย</label><select id="xhn"><option value="">— เลือก —</option>${pts.map(p=>`<option value="${p.HN}"${p.HN==ex.hn?' selected':''}>${esc(p.HN+' · '+p.NM)}</option>`).join('')}</select></div>`,p=pt(ex.hn);
+ if(!p)return box('ข้อมูลผู้ป่วยและประวัติการรักษา',sel+'<p class="empty">เลือกผู้ป่วยเพื่อดูข้อมูลและประวัติการรักษา</p>');
+ var vs=visits.filter(v=>v.HN==p.HN).sort((a,b)=>a.VD<b.VD?1:-1);
+ var tr=vs.map(v=>{var h=hist.filter(x=>x.VN==v.VN)[0],dx=Ts.DX.rows.filter(d=>d.VN_ID==v.VN).map(d=>dsn(d.Disease_ID)).join(', '),md=[];
+  Ts.RX.rows.filter(r=>r.VN_ID==v.VN).forEach(r=>Ts.RXD.rows.filter(d=>d.Prescription_ID==r.Prescription_ID).forEach(d=>md.push(((one('MED','Medicine_ID',d.Medicine_ID)||{}).Medicine_Name||'')+' ×'+d.Quantity)));
+  return `<tr><td>${esc(fmtDT(v.VD))}<br><span class="hn">${esc(v.VN)}</span></td><td>${esc(dn(v.DEP))}</td><td>${h?esc(h.CC)+'<br><small>BP '+esc(h.BP)+' · '+h.TP+' °C</small>':'-'}</td><td>${esc(dx||'-')}</td><td>${esc(md.join(', ')||'-')}</td><td style="text-align:right">${money(sum(chg.filter(c=>c.VN==v.VN),c=>c.AMT))}</td></tr>`}).join('');
+ return box('ข้อมูลผู้ป่วย',sel+`<p><b>${esc(p.NM)}</b> · ${esc(p.HN)} · อายุ ${age(p.BD)} ปี · โทร ${esc(p.PH)}<br><small>${esc(p.AD)}</small></p>`)+box('ประวัติการรักษา ('+vs.length+' ครั้ง)',`<div class="wrap"><table><thead><tr><th>วันที่/VN</th><th>แผนก</th><th>อาการสำคัญ/สัญญาณชีพ</th><th>วินิจฉัย</th><th>ยาที่ได้รับ</th><th>ค่าบริการ (บาท)</th></tr></thead><tbody>${tr||'<tr><td colspan="6" class="empty">ยังไม่มีประวัติ</td></tr>'}</tbody></table></div>`)},
+s:()=>sts([st(pts.length,'ผู้ป่วยทั้งหมด'),st(visits.length,'การเข้ารับบริการ'),st(Ts.AD.rows.filter(a=>!a.Discharge_DateTime).length,'ผู้ป่วยในขณะนี้'),st(Ts.DX.rows.length,'การวินิจฉัย'),st(Ts.RX.rows.length,'ใบสั่งยา'),st(Ts.LT.rows.length+Ts.CO.rows.length,'ใบสั่งตรวจ Lab/CT')])+box('การเข้ารับบริการแยกตามแผนก',bars(cnt(visits,v=>dn(v.DEP))))+box('โรคที่วินิจฉัยบ่อย',bars(cnt(Ts.DX.rows,d=>dsn(d.Disease_ID))))+box('สถานะคิวตรวจ',bars(cnt(queues,q=>q.ST))),
+m:()=>{var N=sum(bills,b=>b.NET),pd=sum(bills.filter(b=>b.ST=='Paid'),b=>b.NET),cat={},me={};
+ chg.forEach(c=>{var k=(iget(c.ITEM)||{}).ct||'อื่น ๆ';cat[k]=(cat[k]||0)+c.AMT});pays.forEach(p=>{me[METH[p.METH]||p.METH]=(me[METH[p.METH]||p.METH]||0)+p.PAID-p.CHG});
+ var bl=o=>bars(Object.keys(o).map(k=>[k,o[k],money(o[k])]));
+ return sts([st(money(sum(bills,b=>b.TOT)),'ค่ารักษารวม (บาท)'),st(money(sum(bills,b=>b.COV)),'เบิกตามสิทธิ์'),st(money(sum(bills,b=>b.DIS)),'ส่วนลด'),st(money(N),'ยอดสุทธิที่เรียกเก็บ'),st(money(pd),'รับชำระแล้ว'),st(money(N-pd),'ค้างชำระ')])+box('รายได้ตามหมวดค่าบริการ',bl(cat))+box('รายรับแยกตามวิธีชำระเงิน',bl(me))},
+u:()=>box('จำนวนข้อมูลในแต่ละระบบ',bars([['ผู้ป่วย',pts.length],['การเข้ารับบริการ',visits.length],['บุคลากร',emps.length],['บัญชีผู้ใช้งาน',accts.length],['ประวัติคัดกรอง',hist.length],['ใบรับรองแพทย์',certs.length],['ใบแจ้งหนี้',bills.length],['การรับชำระเงิน',pays.length],['ค่าใช้จ่ายคนไข้',chg.length],['คิวตรวจ',queues.length],['ผลวินิจฉัย',Ts.DX.rows.length],['ใบสั่งยา',Ts.RX.rows.length],['ใบสั่งตรวจ Lab',Ts.LT.rows.length],['ใบสั่งตรวจ CT',Ts.CO.rows.length],['ผู้ป่วยใน',Ts.AD.rows.length],['นัดหมาย',Ts.APT.rows.length]].sort((a,b)=>b[1]-a[1])))+box('บุคลากรแยกตามตำแหน่ง',bars(cnt(emps,e=>(roles.filter(r=>r.id==e.role)[0]||{}).nm||e.role)))};
+var isEx=()=>{var e=one('EMP','id',$('#cu').value);return !!e&&e.role=='R008'};
+var xv=document.createElement('div');xv.id='v-exec';xv.hidden=true;MODS.exec=1;
+xv.innerHTML=`<header class="top"><div><div class="crumb">ผู้บริหาร › รายงานและสถิติ</div><h1>แผงควบคุมผู้บริหาร</h1></div></header><div class="tabs" role="tablist">${EXT.map(t=>`<button role="tab" data-t="${t[0]}" aria-selected="false">${t[1]}</button>`).join('')}</div><div id="xb"></div>`;$('main').appendChild(xv);
+function xr(){xv.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t==ex.tab));var e=one('EMP','id',$('#cu').value);
+ $('#xb').innerHTML=isEx()?X[ex.tab]():`<div class="card" style="text-align:center;padding:40px"><div style="font-size:40px">🔒</div><h2>ไม่มีสิทธิ์เข้าถึง</h2><p>หน้านี้สำหรับผู้บริหารเท่านั้น<br>ผู้ใช้งานปัจจุบัน: ${esc(e?e.nm:'-')}</p></div>`}
+xv.onclick=e=>{var b=e.target.closest('.tabs button');if(b){ex.tab=b.dataset.t;xr()}};xv.onchange=e=>{if(e.target.id=='xhn'){ex.hn=e.target.value;xr()}};
+var nv=document.querySelector('nav'),cu=document.createElement('div');cu.style.cssText='padding:0 10px 12px;font-size:12px';
+cu.innerHTML=`<label for="cu">ผู้ใช้งาน</label><select id="cu" style="width:100%;margin-top:4px">${emps.map(e=>`<option value="${e.id}"${e.id=='E0006'?' selected':''}>${esc(e.nm)} · ${esc((roles.filter(r=>r.id==e.role)[0]||{}).nm)}</option>`).join('')}</select>`;nv.insertBefore(cu,nv.firstChild);
+var xb=document.createElement('button');xb.id='n-exec';xb.onclick=()=>{view('exec');xr()};setB.parentNode.insertBefore(xb,setB);
+xb.textContent='แผงควบคุมผู้บริหาร';
+var DC=['เอกสารอิเล็กทรอนิกส์','พิมพ์ ดาวน์โหลด หรือลงนามออนไลน์ โดยไม่ใช้กระดาษ','docs',''],EXD={p:'ดูข้อมูลและประวัติการรักษาของผู้ป่วย',s:'จำนวนผู้ป่วย โรคที่พบบ่อย และการใช้บริการ',m:'รายได้ ยอดเบิก ส่วนลด และการชำระเงิน',u:'ปริมาณข้อมูลและบุคลากรในระบบ'};
+var RH={
+R009:['','แผงควบคุมผู้ดูแลระบบ','ผู้ดูแลระบบ',[['จัดการบุคลากรและสิทธิ์','เพิ่ม แก้ไข บัญชีผู้ใช้งานและสิทธิ์การเข้าถึง','staff','#stt-list'],['จัดการแผนกและตำแหน่ง','กำหนดแผนก ตำแหน่ง และหน้าที่ของบุคลากร','staff','#stt-dep'],['ฐานข้อมูลโรค','จัดการข้อมูลโรค สาเหตุ และแนวทางการรักษา','dis','DIS'],['หอผู้ป่วยและเตียง','จัดการหอผู้ป่วยและเตียงผู้ป่วย','adm','WD']]],
+R004:['','แผงควบคุมเวชระเบียน','เจ้าหน้าที่เวชระเบียน',[['ลงทะเบียนผู้ป่วยใหม่','สร้าง HN และบันทึกข้อมูลผู้ป่วย','pt','#t-form'],['ออกใบรับบริการ (VN)','บันทึกการเข้ารับบริการประจำวัน','visit','#vt-form']]],
+R002:['','แผงควบคุมพยาบาลและคัดกรอง','พยาบาลและผู้ช่วยพยาบาล',[['ออกคิวตรวจ','ออกหมายเลขคิวและจัดลำดับความเร่งด่วน','que','#qt-form'],['บันทึกประวัติและสัญญาณชีพ','ซักประวัติ ชั่งน้ำหนัก วัดความดัน','scr','#ht-form'],['แอดมิทและจองเตียง','รับผู้ป่วยในและจัดสรรเตียง','adm','AD'],['ออกใบนัดหมาย','นัดติดตามอาการผู้ป่วย','apt','APT'],['ค้นหาข้อมูลผู้ป่วย','ดูข้อมูลผู้ป่วยและประวัติการเข้ารับบริการ','pt','#t-list'],DC]],
+R001:['','แผงควบคุมห้องตรวจแพทย์','แพทย์',[['รายการคิวตรวจ','ผู้ป่วยที่รอพบแพทย์','que','#qt-board'],['ห้องตรวจรักษา','ตรวจ วินิจฉัย สั่งตรวจ สั่งยา และออกเอกสาร','room',''],['บันทึกการวินิจฉัยโรค','ระบุโรคและบันทึกผลการตรวจ','dx','DX'],['สั่งตรวจ LAB','ส่งตรวจเลือด ปัสสาวะ และอื่น ๆ','lab','LT'],['สั่งตรวจ CT Scan','ส่งตรวจด้วยรังสีวินิจฉัย','ct','CO'],['สั่งจ่ายยา','สั่งยาและวิธีใช้','rx','RX'],['บันทึกค่าบริการ/ค่าตรวจ','บันทึกค่าธรรมเนียมแพทย์และค่าตรวจ','chg','#gt-form'],['ออกใบรับรองแพทย์','ออกใบรับรองการตรวจรักษา','cert','#ct-form'],['ฐานข้อมูลโรค','ค้นหาข้อมูลโรค สาเหตุ และแนวทางการรักษา','dis','DIS'],['นัดหมายผู้ป่วย','ดูใบนัดหมายติดตามอาการ','apt','APT'],['ผู้ป่วยใน','ดูข้อมูลผู้ป่วยที่นอนโรงพยาบาล','adm','AD'],DC]],
+R006:['','แผงควบคุมห้องปฏิบัติการ','เจ้าหน้าที่ห้องปฏิบัติการ',[['รายการสั่งตรวจรอผล','คำสั่งตรวจที่รอดำเนินการ','lab','LT'],['บันทึกผลตรวจ','รายงานผลตรวจทางห้องปฏิบัติการ','lab','LR'],['รายการตรวจและกลุ่มตรวจ','จัดการรายการตรวจ ค่าอ้างอิง และราคา','lab','LI'],DC]],
+R007:['','แผงควบคุมแผนกรังสี','นักเทคนิครังสี',[['รายการสั่งตรวจ CT Scan','คำสั่งตรวจที่รอดำเนินการ','ct','CO'],['บันทึกผลอ่านภาพ CT Scan','รายงานผลการอ่านภาพ','ct','CR'],['รายการตรวจ CT Scan','จัดการรายการตรวจและราคา','ct','CI'],DC]],
+R003:['','แผงควบคุมห้องจ่ายยา','เภสัชกร',[['คลังยาและราคา','ตรวจสอบรายการยาและจำนวนคงเหลือ','rx','MED'],['รอจ่ายยาและจ่ายยา','ตรวจสอบใบสั่งยาและส่งมอบยา','rx','DSP'],DC]],
+R005:['','แผงควบคุมการเงิน','เจ้าหน้าที่การเงิน',[['สรุปค่ารักษา','ใบแจ้งหนี้ ยอดเบิก และส่วนลด','fin','#ft-bill'],['รับชำระเงิน','รับเงินและออกใบเสร็จ','fin','#ft-pay'],['ค่าใช้จ่ายของผู้ป่วย','ตรวจสอบรายการค่าใช้จ่ายก่อนออกใบแจ้งหนี้','chg','#gt-list'],['ราคาค่าบริการ','กำหนดอัตราค่าบริการมาตรฐาน','chg','#gt-item'],DC]],
+R008:['','แผงควบคุมผู้บริหาร','ผู้บริหาร',EXT.map(t=>[t[1],EXD[t[0]],'exec',t[0]]).concat([DC])]};
+function go(v,t){if(v=='exec'&&t)ex.tab=t;$('#n-'+v).click();if(!t||v=='exec')return;if(t[0]=='#'){var b=$(t);if(b)b.click()}else show(v,t)}
+var hv=document.createElement('div');hv.id='v-home';hv.hidden=true;MODS.home=1;hv.innerHTML='<header class="top"><div><div class="crumb" id="hc"></div><h1 id="ht"></h1></div></header><div id="hb"></div>';$('main').appendChild(hv);
+function homeR(){var e=one('EMP','id',$('#cu').value),h=RH[e.role];$('#hc').textContent=h[2];$('#ht').textContent=h[1];
+ $('#hb').innerHTML=`<p style="margin:0 0 14px;color:var(--mute)">ผู้ใช้งาน: <b style="color:var(--ink)">${esc(e.nm)}</b> · แผนก ${esc(dn(e.dep))} · เลือกหน้าจอที่ได้รับสิทธิ์ใช้งาน</p><div class="stats" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))">${h[3].map((i,n)=>`<button class="stat" data-n="${n}" style="font:inherit;color:inherit;text-align:left;cursor:pointer"><b style="font-size:16px">${esc(i[0])}</b><span>${esc(i[1])}</span></button>`).join('')}</div>`}
+hv.onclick=ev=>{var b=ev.target.closest('button[data-n]');if(!b)return;var h=RH[one('EMP','id',$('#cu').value).role],i=h[3][b.dataset.n];go(i[2],i[3])};
+var nh=document.createElement('button');nh.id='n-home';nh.textContent='หน้าหลัก';nh.onclick=()=>{view('home');homeR()};nv.insertBefore(nh,cu.nextSibling);
+var ctx={vn:''},RS=[['บันทึกการวินิจฉัยโรค','ระบุโรคและบันทึกผลการตรวจ','dx','DX'],['สั่งตรวจ LAB','ส่งตรวจเลือด ปัสสาวะ และอื่น ๆ','lab','LT'],['สั่งตรวจ CT Scan','ส่งตรวจด้วยรังสีวินิจฉัย','ct','CO'],['สั่งจ่ายยา','สั่งยาและวิธีใช้','rx','RX'],['บันทึกค่าบริการ/ค่าตรวจ','บันทึกค่าธรรมเนียมแพทย์และค่าตรวจ','chg','#gt-form'],['ออกใบรับรองแพทย์','ออกใบรับรองการตรวจรักษา','cert','#ct-form']];
+var rv=document.createElement('div');rv.id='v-room';rv.hidden=true;MODS.room=1;rv.innerHTML='<header class="top"><div><div class="crumb">แพทย์ › ห้องตรวจ</div><h1>ห้องตรวจรักษาและวินิจฉัย (Consultation Room)</h1></div><button class="btn" id="rq">← รายการคิวตรวจ</button></header><div id="rb"></div>';$('main').appendChild(rv);
+function roomR(){var v=vget(ctx.vn),h=v&&hist.filter(x=>x.VN==v.VN)[0],p=v&&pt(v.HN),n=(t,k)=>Ts[t].rows.filter(r=>r[k]==ctx.vn).length;
+ var sel=`<div class="f" style="max-width:460px"><label for="rvn">เลือกผู้ป่วย (VN) ที่กำลังตรวจ</label><select id="rvn"><option value="">— เลือก —</option>${visits.slice().sort((a,b)=>a.VD<b.VD?1:-1).map(x=>`<option value="${x.VN}"${x.VN==ctx.vn?' selected':''}>${esc(R.VN.l(x))}</option>`).join('')}</select></div>`;
+ var info=p?`<p><b>${esc(p.NM)}</b> · ${esc(p.HN)} · อายุ ${age(p.BD)} ปี · แผนก ${esc(dn(v.DEP))}</p>`+(h?`<p>อาการสำคัญ: ${esc(h.CC)}<br>สัญญาณชีพ: BP ${esc(h.BP)} · ${h.TP} °C · ชีพจร ${h.PR} · หายใจ ${h.RR} · น้ำหนัก ${h.WT} กก. · สูง ${h.HT} ซม.<br>ประวัติแพ้ยา/อาหาร: <b>${esc(h.AL||'-')}</b></p>`:'<p class="empty">ยังไม่มีประวัติคัดกรอง</p>')+`<p style="color:var(--mute)">บันทึกแล้ว: วินิจฉัย ${n('DX','VN_ID')} · สั่ง Lab ${n('LT','VN_ID')} · สั่ง CT ${n('CO','VN_ID')} · สั่งยา ${n('RX','VN_ID')} · ค่าบริการ ${chg.filter(c=>c.VN==ctx.vn).length}</p>`:'<p class="empty">เลือก VN เพื่อเริ่มการตรวจ</p>';
+ $('#rb').innerHTML=box('ผู้ป่วยที่กำลังตรวจ',sel+info)+`<div class="stats" style="grid-template-columns:repeat(auto-fill,minmax(250px,1fr))">${RS.map((i,k)=>`<button class="stat" data-r="${k}"${p?'':' disabled'} style="font:inherit;color:inherit;text-align:left;cursor:${p?'pointer':'not-allowed'}"><b style="font-size:16px">${esc(i[0])}</b><span>${esc(i[1])}</span></button>`).join('')}</div>`}
+rv.onchange=e=>{if(e.target.id=='rvn'){ctx.vn=e.target.value;roomR()}};
+rv.onclick=e=>{if(e.target.closest('#rq')){go('que','#qt-board');return}var b=e.target.closest('button[data-r]');if(!b)return;var i=RS[b.dataset.r];go(i[2],i[3]);if(Ts[i[3]]&&$('#a-'+i[2]))$('#a-'+i[2]).click()};
+var nr=document.createElement('button');nr.id='n-room';nr.textContent='ห้องตรวจรักษาและวินิจฉัย';nr.onclick=()=>{view('room');roomR()};$('#n-dx').parentNode.insertBefore(nr,$('#n-dx'));
+var SIG={},DOCT={R001:['cert','rx','apt','lab','ct'],R002:['apt'],R003:['rx'],R005:['receipt','bill'],R006:['lab'],R007:['ct'],R008:['cert','rx','apt','lab','ct','receipt','bill']},SB={cert:['R001'],rx:['R001'],apt:['R001','R002'],lab:['R006','R001'],ct:['R007'],receipt:['R005'],bill:['R005']},dk=null;
+var kv=a=>`<table class="kv">${a.map(x=>`<tr><th>${x[0]}</th><td>${x[1]}</td></tr>`).join('')}</table>`,tb=(h,rows)=>`<table class="grid"><thead><tr>${h.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(x=>`<td>${x}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
+var ptv=vn=>{var v=vget(vn),p=v&&pt(v.HN);return p?[['ผู้ป่วย',esc(p.NM)],['HN / VN',esc(p.HN)+' / '+esc(vn)],['อายุ',age(p.BD)+' ปี']]:[['VN',esc(vn)]]},ename=id=>(one('EMP','id',id)||{}).nm||id;
+var DT={
+cert:{t:'ใบรับรองแพทย์',l:()=>certs.map(c=>({id:c.CID,vn:c.VN,d:c.IS})),b:id=>{var c=certs.filter(x=>x.CID==id)[0],v=vget(c.VN);return{h:kv(ptv(c.VN).concat([['วันที่เข้ารับการตรวจ',thDate(v.VD.slice(0,10))],['ผลการวินิจฉัย/อาการ',esc(c.DX)],['ความเห็นแพทย์',esc(c.CM||'-')]]))+`<p>ขอรับรองว่าผู้ป่วยรายนี้สมควรหยุดพักรักษาตัวเป็นเวลา <b>${c.RD} วัน</b> ตั้งแต่วันที่ ${thDate(c.RS)} ถึงวันที่ ${thDate(c.RE)}</p>`,s:'แพทย์ผู้ออกใบรับรอง'}}},
+receipt:{t:'ใบเสร็จรับเงิน',l:()=>pays.map(p=>({id:p.PID,vn:(bills.filter(b=>b.BID==p.BID)[0]||{}).VN,d:p.DT})),b:id=>{var p=pays.filter(x=>x.PID==id)[0],b=bills.filter(x=>x.BID==p.BID)[0];return{h:kv(ptv(b.VN).concat([['เลขที่ใบแจ้งหนี้',esc(b.BID)],['วิธีชำระเงิน',esc(METH[p.METH]||p.METH)],['ยอดสุทธิ',money(b.NET)+' บาท'],['รับเงิน',money(p.PAID)+' บาท'],['เงินทอน',money(p.CHG)+' บาท'],['ผู้รับเงิน',esc(ename(p.CASH))]])),s:'เจ้าหน้าที่การเงินผู้รับเงิน'}}},
+bill:{t:'ใบสรุปค่ารักษาพยาบาล',l:()=>bills.map(b=>({id:b.BID,vn:b.VN,d:(vget(b.VN)||{}).VD})),b:id=>{var b=bills.filter(x=>x.BID==id)[0];return{h:kv(ptv(b.VN))+tb(['รายการ','จำนวน','จำนวนเงิน (บาท)'],chg.filter(c=>c.VN==b.VN).map(c=>[esc(inm(c.ITEM)),c.QTY,money(c.AMT)]))+kv([['ค่ารักษารวม',money(b.TOT)+' บาท'],['เบิกตามสิทธิ์',money(b.COV)+' บาท'],['ส่วนลด',money(b.DIS)+' บาท'],['ยอดสุทธิที่ต้องชำระ','<b>'+money(b.NET)+' บาท</b>']]),s:'เจ้าหน้าที่การเงิน'}}},
+apt:{t:'ใบนัดหมาย',l:()=>Ts.APT.rows.map(a=>({id:a.Appointment_ID,vn:a.VN_ID,d:a.Appointment_Date})),b:id=>{var a=one('APT','Appointment_ID',id);return{h:kv(ptv(a.VN_ID).concat([['แพทย์ผู้นัด',esc(ename(a.Doctor_ID))],['แผนก/ห้องตรวจ',esc(dn(a.Department_ID))],['วันที่นัด',thDate(a.Appointment_Date)],['เวลา',a.Appointment_Time_Start+' - '+a.Appointment_Time_End+' น.'],['การเตรียมตัวก่อนมา',esc(a.Preparation_Instruction||'-')]])),s:'เจ้าหน้าที่ผู้ออกใบนัด'}}},
+rx:{t:'ใบสั่งยา',l:()=>Ts.RX.rows.map(r=>({id:r.Prescription_ID,vn:r.VN_ID,d:r.Prescription_Date})),b:id=>{var r=one('RX','Prescription_ID',id);return{h:kv(ptv(r.VN_ID).concat([['แพทย์ผู้สั่งยา',esc(ename(r.Doctor_ID))]]))+tb(['ยา','จำนวน','วิธีใช้'],Ts.RXD.rows.filter(d=>d.Prescription_ID==id).map(d=>{var m=one('MED','Medicine_ID',d.Medicine_ID)||{};return[esc((m.Medicine_Name||'')+' '+(m.Strength||'')),d.Quantity+' '+esc(m.Unit||''),esc(d.Dosage_Instruction||'')]})),s:'แพทย์ผู้สั่งยา'}}},
+lab:{t:'ผลตรวจทางห้องปฏิบัติการ',l:()=>Ts.LT.rows.map(o=>({id:o.Lab_Order_ID,vn:o.VN_ID,d:o.Order_DateTime})),b:id=>{var o=one('LT','Lab_Order_ID',id);return{h:kv(ptv(o.VN_ID).concat([['สิ่งส่งตรวจ',esc(o.Specimen_Type)],['แพทย์ผู้สั่งตรวจ',esc(ename(o.Doctor_ID))]]))+tb(['รายการตรวจ','ผล','ค่าอ้างอิง','หน่วย','แปลผล'],Ts.LR.rows.filter(r=>r.Lab_Order_ID==id).map(r=>{var i=one('LI','Lab_Item_ID',r.Lab_Item_ID)||{};return[esc(i.Item_Name||''),'<b>'+esc(r.Result_Value)+'</b>',esc(i.Normal_Range||''),esc(i.Unit||''),SM[r.Abnormal_Flag]||r.Abnormal_Flag]})),s:'ผู้อนุมัติผลตรวจ'}}},
+ct:{t:'รายงานผลตรวจ CT Scan',l:()=>Ts.CO.rows.map(o=>({id:o.CT_Order_ID,vn:o.VN_ID,d:o.Order_Date})),b:id=>{var o=one('CO','CT_Order_ID',id);return{h:kv(ptv(o.VN_ID).concat([['แพทย์ผู้สั่งตรวจ',esc(ename(o.Doctor_ID))],['ข้อบ่งชี้',esc(o.Clinical_History||'-')],['ตั้งครรภ์/ให้นมบุตร',o.Is_Pregnant=='1'?'ใช่':'ไม่ใช่']]))+tb(['รายการตรวจ','ผลการอ่านภาพ','ผู้อ่านผล'],Ts.COD.rows.filter(d=>d.CT_Order_ID==id).map(d=>{var r=Ts.CR.rows.filter(x=>x.CT_Detail_ID==d.CT_Detail_ID)[0]||{};return[esc((one('CI','CT_Item_ID',d.CT_Item_ID)||{}).CT_Item_Name||''),esc(r.Result_Text||'รอผล'),esc(r.Radiologist_ID?ename(r.Radiologist_ID):'-')]})),s:'นักเทคนิครังสี/รังสีแพทย์'}}}};
+function alg(vn){var v=vget(vn),a=hist.filter(h=>{var x=vget(h.VN);return x&&v&&x.HN==v.HN&&h.AL&&h.AL!='-'}).map(h=>h.AL);return a.length?a[a.length-1]:''}
+function dHtml(k){var ty=k.split(':')[0],id=k.slice(ty.length+1),T=DT[ty],b=T.b(id),g=SIG[k]||{};
+ var sg=g.img?`<img src="${g.img}" alt="ลายเซ็น" style="height:64px"><div>(${esc(g.name)})</div><div>${esc(g.pos)}</div><div style="font-size:12px;color:#555">ลงนามอิเล็กทรอนิกส์เมื่อ ${esc(fmtDT(g.at))}</div>`:g.file?`<div style="height:64px;padding-top:20px">ลงนามแล้ว (เอกสารแนบ: ${esc(g.file.name)})</div>`:`<div style="height:64px"></div><div>(...................................................)</div><div>${esc(b.s)}</div>`;
+ return `<!doctype html><html lang="th"><head><meta charset="utf-8"><title>${T.t} ${esc(id)}</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;600&display=swap"><style>@page{size:A4;margin:14mm}body{font-family:'IBM Plex Sans Thai',Tahoma,sans-serif;color:#111;font-size:14px;line-height:1.6;margin:0;padding:24px;background:#fff}.hd{text-align:center;border-bottom:2px solid #111;padding-bottom:10px;margin-bottom:16px}.hd b{font-size:18px}h1{font-size:20px;text-align:center;margin:8px 0 2px}.no{text-align:center;color:#444;margin-bottom:16px}table{border-collapse:collapse;width:100%;margin:10px 0}.kv th{text-align:left;width:34%;padding:4px 8px;vertical-align:top;color:#333}.kv td{padding:4px 8px}.grid th,.grid td{border:1px solid #888;padding:6px 8px;text-align:left}.grid th{background:#eee}.sg{margin-top:36px;width:50%;margin-left:50%;text-align:center}.ft{margin-top:30px;font-size:11px;color:#555;border-top:1px solid #bbb;padding-top:6px}</style></head><body><div class="hd"><b>โรงพยาบาลมหาราชนครราชสีมา</b><br>Maharat Nakhon Ratchasima Hospital</div><h1>${T.t}</h1><div class="no">เลขที่เอกสาร ${esc(id)}</div>${b.h}<div class="sg">${sg}</div><div class="ft">เอกสารอิเล็กทรอนิกส์จากระบบสารสนเทศโรงพยาบาล เลขที่ ${esc(id)}</div></body></html>`}
+var dd=document.createElement('dialog');dd.id='ddlg';dd.style.cssText='width:min(920px,96vw);max-width:96vw;padding:0;border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink)';
+dd.innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:12px 16px;border-bottom:1px solid var(--line)"><b id="dtl" style="flex:1;min-width:180px"></b><button class="btn" id="dpr">🖨 พิมพ์</button><button class="btn" id="ddl">⬇ ดาวน์โหลด PDF</button><button class="btn pri" id="dsg">✍ ลงนามออนไลน์</button><label class="btn" id="dup" style="cursor:pointer">📎 แนบไฟล์ที่ลงนามแล้ว<input type="file" id="dfi" accept=".pdf,image/*" hidden></label><button class="btn" id="dvw" hidden>ดูไฟล์ที่ลงนามแล้ว</button><button class="btn" id="dcl">ปิด</button></div><div id="dsp" hidden style="padding:12px 16px;border-bottom:1px solid var(--line)"><p style="margin:0 0 6px">เซ็นชื่อในกรอบด้านล่าง (ใช้เมาส์หรือนิ้ว)</p><canvas id="dcv" width="520" height="150" style="border:1px dashed var(--mute);border-radius:8px;background:#fff;touch-action:none;max-width:100%"></canvas><div style="margin-top:8px;display:flex;gap:8px"><button class="btn" id="dcc">ล้าง</button><button class="btn pri" id="dok">ยืนยันลงนามและบันทึกลงระบบ</button></div></div><div id="dst" style="padding:8px 16px;font-size:13px;color:var(--mute)"></div><iframe id="dfr" title="เอกสาร" style="width:100%;height:68vh;border:0;background:#fff"></iframe>`;document.body.appendChild(dd);
+var cv=$('#dcv'),cx=cv.getContext('2d'),dr=false,inked=false;cx.lineWidth=2.4;cx.lineCap='round';cx.strokeStyle='#111';
+var pp=e=>{var r=cv.getBoundingClientRect();return[(e.clientX-r.left)*cv.width/(r.width||cv.width),(e.clientY-r.top)*cv.height/(r.height||cv.height)]};
+cv.onpointerdown=e=>{dr=true;var p=pp(e);cx.beginPath();cx.moveTo(p[0],p[1]);if(cv.setPointerCapture)cv.setPointerCapture(e.pointerId)};
+cv.onpointermove=e=>{if(!dr)return;var p=pp(e);cx.lineTo(p[0],p[1]);cx.stroke();inked=true};cv.onpointerup=()=>{dr=false};
+$('#dcc').onclick=()=>{cx.clearRect(0,0,cv.width,cv.height);inked=false};$('#dsg').onclick=()=>{$('#dsp').hidden=false;$('#dcc').click()};
+$('#dok').onclick=()=>{if(!inked){toast('กรุณาเซ็นชื่อก่อน');return}var e=one('EMP','id',$('#cu').value);SIG[dk]=Object.assign(SIG[dk]||{},{img:cv.toDataURL('image/png'),name:e.nm,pos:(roles.filter(r=>r.id==e.role)[0]||{}).nm||'',at:nowLocal(),by:e.id});toast('ลงนามและบันทึกลงระบบแล้ว');dRef()};
+function saveF(n,b){var a=()=>{var u=URL.createObjectURL(b),l=document.createElement('a');l.href=u;l.download=n;document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),3000)};if(window.claude&&claude.use)claude.use('downloads').then(d=>d?d.save({filename:n,data:b}).catch(()=>{}):a(),a);else a()}
+function lib(u){return new Promise((ok,no)=>{var s=document.createElement('script');s.src=u;s.onload=ok;s.onerror=no;document.head.appendChild(s)})}
+$('#dpr').onclick=()=>{var w=$('#dfr').contentWindow;w.focus();w.print()};
+$('#ddl').onclick=async()=>{var nme=dk.replace(':','-');toast('กำลังสร้างไฟล์ PDF...');try{if(!window.html2canvas)await lib('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js');if(!window.jspdf)await lib('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js');
+ var c=await html2canvas($('#dfr').contentDocument.body,{scale:2,backgroundColor:'#fff'}),pdf=new jspdf.jsPDF('p','mm','a4'),w=210,h=c.height*w/c.width,im=c.toDataURL('image/jpeg',.92);for(var y=0;y<h;y+=297){if(y)pdf.addPage();pdf.addImage(im,'JPEG',0,-y,w,h)}saveF(nme+'.pdf',pdf.output('blob'))}
+ catch(e){saveF(nme+'.html',new Blob([dHtml(dk)],{type:'text/html'}));toast('สร้าง PDF ไม่สำเร็จ จึงบันทึกเป็นไฟล์ HTML แทน')}};
+$('#dfi').onchange=e=>{var f=e.target.files[0];e.target.value='';if(!f)return;if(f.size>5*1048576){toast('ไฟล์ต้องไม่เกิน 5 MB');return}var r=new FileReader();r.onload=()=>{SIG[dk]=Object.assign(SIG[dk]||{},{file:{name:f.name,data:r.result,at:nowLocal(),by:$('#cu').value}});toast('แนบเอกสารที่ลงนามแล้วและบันทึกลงระบบ');dRef()};r.readAsDataURL(f)};
+$('#dvw').onclick=()=>{fetch(SIG[dk].file.data).then(r=>r.blob()).then(b=>window.open(URL.createObjectURL(b),'_blank'))};$('#dcl').onclick=()=>dd.close();
+function dOpen(k){dk=k;var ty=k.split(':')[0];$('#dtl').textContent=DT[ty].t+' · '+k.slice(ty.length+1);dRef();dd.showModal()}
+function dRef(){var k=dk,ty=k.split(':')[0],g=SIG[k]||{},ok=SB[ty].indexOf(one('EMP','id',$('#cu').value).role)>-1;$('#dfr').srcdoc=dHtml(k);$('#dsg').hidden=!ok;$('#dup').style.display=ok?'':'none';$('#dvw').hidden=!g.file;$('#dsp').hidden=true;
+ $('#dst').textContent=g.img?'ลงนามโดย '+g.name+' เมื่อ '+fmtDT(g.at)+' · บันทึกในระบบแล้ว':g.file?'แนบไฟล์ที่ลงนามแล้ว: '+g.file.name+' · '+fmtDT(g.file.at):ok?'สถานะ: รอลงนาม':'สถานะ: รอลงนาม (ผู้ใช้งานนี้ไม่มีสิทธิ์ลงนาม สามารถพิมพ์หรือดาวน์โหลดได้)';dList()}
+var dv=document.createElement('div');dv.id='v-docs';dv.hidden=true;MODS.docs=1;
+dv.innerHTML='<header class="top"><div><div class="crumb">เอกสารอิเล็กทรอนิกส์ › ไม่ใช้กระดาษ</div><h1>เอกสารอิเล็กทรอนิกส์</h1></div></header><div class="card"><div class="tools"><input id="dq" type="search" placeholder="ค้นหาเลขที่เอกสารหรือชื่อผู้ป่วย" aria-label="ค้นหา"><select id="dty" aria-label="ประเภทเอกสาร"></select><select id="dss" aria-label="สถานะ"><option value="">ทุกสถานะ</option><option value="0">รอลงนาม</option><option value="1">ลงนามแล้ว</option></select></div><div class="wrap" id="dtb"></div></div>';$('main').appendChild(dv);
+function dList(){var al=DOCT[one('EMP','id',$('#cu').value).role]||[],sel=$('#dty'),cur=sel.value,o=[];sel.innerHTML='<option value="">ทุกประเภท</option>'+al.map(t=>`<option value="${t}">${DT[t].t}</option>`).join('');sel.value=al.indexOf(cur)>-1?cur:'';
+ al.forEach(ty=>DT[ty].l().forEach(x=>o.push({k:ty+':'+x.id,ty:ty,id:x.id,vn:x.vn,d:x.d})));var q=$('#dq').value.toLowerCase(),ss=$('#dss').value,sd2=r=>!!(SIG[r.k]&&(SIG[r.k].img||SIG[r.k].file));
+ var rows=o.filter(r=>(!sel.value||r.ty==sel.value)&&(!ss||(ss=='1')==sd2(r))&&(!q||(r.id+' '+nm(r.vn)+DT[r.ty].t).toLowerCase().indexOf(q)>-1)).sort((a,b)=>String(b.d)<String(a.d)?-1:1);
+ $('#dtb').innerHTML=`<table><thead><tr><th>เลขที่เอกสาร</th><th>ประเภท</th><th>ผู้ป่วย</th><th>วันที่</th><th>สถานะ</th><th></th></tr></thead><tbody>${rows.map(r=>`<tr><td><span class="hn">${esc(r.id)}</span></td><td>${DT[r.ty].t}</td><td>${esc(nm(r.vn))}</td><td>${esc(r.d?(String(r.d).length>10?fmtDT(r.d):thDate(r.d)):'-')}</td><td><span class="pill${sd2(r)?'':' amber'}">${sd2(r)?'ลงนามแล้ว':'รอลงนาม'}</span></td><td><button class="btn sm" data-k="${esc(r.k)}">เปิดเอกสาร</button></td></tr>`).join('')||'<tr><td colspan="6" class="empty">ไม่มีเอกสาร</td></tr>'}</tbody></table>`}
+dv.oninput=dv.onchange=e=>{if(/^d(q|ty|ss)$/.test(e.target.id))dList()};dv.onclick=e=>{var b=e.target.closest('button[data-k]');if(b)dOpen(b.dataset.k)};
+var nd=document.createElement('button');nd.id='n-docs';nd.textContent='เอกสารอิเล็กทรอนิกส์';nd.onclick=()=>{view('docs');dList()};setB.parentNode.insertBefore(nd,setB);
+function applyUser(){var e=one('EMP','id',$('#cu').value),h=RH[e.role],ok=['home'].concat(h[3].map(i=>i[2]),e.role=='R001'?['dis','room','dx','lab','ct','rx','chg','cert','que']:[]);
+ document.querySelectorAll('nav button[id^="n-"]').forEach(b=>{b.style.display=ok.indexOf(b.id.slice(2))>-1?'':'none'});
+ var u=document.querySelector('.user b');if(u)u.textContent=e.nm+' · '+h[2].replace('สิทธิ์','');document.body.dataset.role=e.role;var qf=$('#qt-form');if(qf)qf.style.display=e.role=='R002'?'':'none';view('home');homeR()}
+$('#cu').onchange=applyUser;setTimeout(applyUser,0);
+
+var _v=view;view=function(n){_v(n);Object.keys(MODS).forEach(k=>{$('#v-'+k).hidden=k!=n;var b=$('#n-'+k);if(k==n)b.setAttribute('aria-current','page');else b.removeAttribute('aria-current')})};
+})();
+</script>
+<dialog id="kdlg"><div class="dh"><h2 id="kh"></h2></div><dl id="kd"></dl><div class="df"><button class="btn" onclick="this.closest('dialog').close()">ปิด</button></div></dialog>
+<style>aside{overflow-y:auto}#v-pt .danger,#v-visit .danger,#v-cert .danger,#v-scr .danger,#v-fin .danger,#v-chg .danger{display:none!important}body[data-role=R002] #v-pt header .btn,body[data-role=R002] #v-pt .tools .btn.pri,body[data-role=R002] #t-form,body[data-role=R002] #v-pt [data-e]{display:none!important}body[data-role=R001] #gt-item{display:none!important}body[data-role=R005] #gt-form,body[data-role=R005] #goChg,body[data-role=R005] #v-chg [data-e]{display:none!important}body[data-role=R001] #goQue,body[data-role=R001] #v-que [data-x]{display:none!important}</style>
+</body>
+</html>
